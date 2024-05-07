@@ -1,0 +1,20 @@
+#!/usr/bin/env php
+<?php
+require_once 'vendor/autoload.php';
+
+(Dotenv\Dotenv::createImmutable(__DIR__ . '/..'))->load();
+
+$className = '\Jegulnomic\Command\\' . $argv[1];
+$methodName = $argv[2];
+
+if (!class_exists($className)) {
+    \Jegulnomic\Systems\Command::output('No such command class');
+    die;
+}
+
+if (!method_exists($className, $methodName)) {
+    \Jegulnomic\Systems\Command::output('No such command method');
+    die;
+}
+
+(new $className(array_slice($argv, 3)))->$methodName();

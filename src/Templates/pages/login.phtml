@@ -1,0 +1,24 @@
+<?php use Jegulnomic\Systems\Template\Flash;?>
+
+<?php $this->extend('src/Templates/base.phtml') ?>
+<?php $this->block('modal') ?>
+    <div class="login-window modal">
+        <h1>Login</h1>
+        <form action="/remittance-operator/login" method="POST">
+            <?=Flash::flash('login') ?>
+
+            <label for="telegram-user-id">Telegram user id:</label>
+            <input
+                name="telegram-user-id"
+                id="telegram-user-id"
+                type="text"
+                class="textable"
+                value="<?=$_GET['telegram_user_id'] ?? $_POST['telegram-user-id']?>"
+            />
+
+            <label for="password">Password:</label>
+            <input name="password" id="password" type="password" class="textable"/>
+            <input type="submit" name="Login"/>
+        </form>
+    </div>
+<?php $this->endblock() ?>

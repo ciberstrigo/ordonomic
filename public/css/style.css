@@ -1,0 +1,344 @@
+body {
+    margin: 0;
+    font-family: 'BIOS', 'BIOS-rus', sans-serif;
+    background-color: #ccc;
+}
+
+::selection {
+    color: yellow;
+    background: red;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+header > .title {
+    display: flex;
+    background-color: #00eebc;
+    height: 20pt;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.text-red {
+    color: red;
+}
+header > .tabs {
+    background-color: #1214b0;
+    height: 20pt;
+    display: flex;
+    justify-content: space-between;
+}
+
+header > .tabs > ul {
+    list-style-type: none;
+    display: flex;
+    margin-block: 0;
+    padding-inline: 0;
+    height: 100%;
+}
+
+header > .tabs > ul > a > li {
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    padding: 0 15pt 0 15pt;
+}
+
+header > .tabs > ul > a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+}
+
+header > .tabs > ul > a > li.active {
+    background-color: #ccc;
+    color: #1214b0;
+}
+
+header > .tabs > .user-info {
+    display: flex;
+    align-items: center;
+    padding: 0 15pt 0 15pt;
+    color: #ccc;
+}
+
+header > .tabs > .user-info > a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+
+.container {
+    height: calc(100vh - 80pt);
+    display: flex;
+    flex-direction: row;
+}
+
+.container > .in-block {
+    margin: 6pt 4pt 4pt;
+    border: 4px solid #1214b0;
+    display: flex;
+    width: 100%;
+}
+
+.container > .in-block > .divider {
+    border: 2px solid #1214b0;
+    display: flex;
+}
+
+.container > .in-block > .content {
+    margin: 5pt 5pt 5pt 12pt;
+}
+
+.container > .in-block > .left {
+    overflow: auto;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+::-webkit-scrollbar-track {
+    background: #898b8b;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1214b0;
+    border-radius: 0;
+}
+
+body {
+    scrollbar-color: #1214b0 #898b8b;
+    scrollbar-width: thin;
+}
+
+footer {
+    height: 40pt;
+    background-color: #989a9c;
+}
+
+footer > .content {
+    padding: 8pt;
+}
+
+@font-face {
+    font-family: 'BIOS';
+    src: url("./fonts/ModernDOS8x16.ttf") format("truetype")
+}
+
+@font-face {
+    font-family: 'BIOS-rus';
+    src: url("./fonts/basis33.ttf") format("truetype");
+}
+
+/*testificate*/
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: -100% 0;
+    }
+    100% {
+        background-position: 100% 0;
+    }
+}
+
+.gradient-box {
+    background: repeating-linear-gradient(to right,
+    #0425ec 0%,
+    #0425ec 10%,
+
+    #0524d9 10%,
+    #0524d9 20%,
+
+    #041fbb 20%,
+    #041fbb 30%,
+
+    #041a9c 30%,
+    #041a9c 40%,
+
+    #08066c 40%,
+    #08066c 50%,
+
+    #041a9c 50%,
+    #041a9c 60%,
+
+    #061fa8 60%,
+    #061fa8 70%,
+
+    #041fbb 70%,
+    #041fbb 80%,
+
+    #0524d9 80%,
+    #0524d9 90%,
+
+    #0625ce 90%,
+    #0625ce 100%
+    );
+    background-size: 200% 100%;
+    animation: gradientAnimation 15s linear infinite;
+    color: #FFF;
+}
+
+.select-options {
+    display: flex;
+    flex-direction: column;
+}
+
+.select-options a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* button */
+a {
+    color: inherit;
+    font-family: 'BIOS', 'BIOS-rus', 'sans-serif';
+}
+
+a.active {
+    background-color: black;
+    color: white;
+}
+
+/* !login.phtml! */
+.login-window {
+    position: relative; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #00eebc; width: 50%;
+    padding: 10pt;
+    box-shadow: 10px 15px 1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.login-window > form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-window > form > input {
+    margin-bottom: 10pt;
+}
+
+.login-window > form > input.textable {
+    color: white;
+    background-color: #1214b0;
+    border: none; /* Remove default border */
+    outline: none; /* Remove the default focus outline */
+    font-family: 'BIOS', 'BIOS-rus', sans-serif;
+}
+
+input[type='text'] {
+    color: white;
+    background-color: #1214b0;
+    border: none; /* Remove default border */
+    outline: none; /* Remove the default focus outline */
+    font-family: 'BIOS', 'BIOS-rus', sans-serif;
+    border-radius: 0;
+}
+
+.login-window > form > input[type='submit'] {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'BIOS', 'BIOS-rus', sans-serif;
+    font-size: 16pt;
+}
+
+textarea {
+    color: white;
+    background-color: #1214b0;
+    border: none; /* Remove default border */
+    outline: none; /* Remove the default focus outline */
+    font-family: 'BIOS', 'BIOS-rus', sans-serif;
+    resize: none;
+    border-radius: 0;
+}
+
+input {
+    border-radius: 0;
+}
+
+.alert-error {
+    padding: 10pt;
+    margin-bottom: 10pt;
+    background-color: red;
+    color: yellow;
+}
+
+.alert-success {
+    padding: 10pt;
+    margin-bottom: 10pt;
+    background-color: #1214b0;
+    color: yellow;
+}
+
+
+.modal-background {
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 998;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+}
+
+b {
+    color: yellow;
+    background-color: green;
+}
+
+.container li {
+    list-style-type: square;
+}
+
+button {
+    margin: 5px;
+    padding: 3px;
+    color: white;
+    background-color: black;
+}
+
+input[type="submit"] {
+    border: none;     /* Убирает рамку */
+    font-family: inherit;
+    margin: 5px;
+    padding: 3px;
+    color: white;
+    background-color: black;
+}
+
+
+@media (max-width: 768px) {
+    .container > .in-block {
+        flex-direction: column;
+    }
+
+    .container > .in-block > .left {
+        width: auto;
+        height: -webkit-fill-available;
+        height: -moz-available;
+        height: fill-available;
+        height: 100%;
+    }
+
+    .container > .in-block > .right {
+        width: auto;
+    }
+
+    .pseudo-graphics {
+        font-size: 7pt;
+    }
+}
+
+.pseudo-graphics {
+    line-height: 1;
+}
