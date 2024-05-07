@@ -6,7 +6,7 @@ use Override;
 
 class DecimalCalculator implements CalculatorInterface
 {
-    const int ACCURACY = 4;
+    public const int ACCURACY = 4;
 
     public function __construct(private string $decimal)
     {

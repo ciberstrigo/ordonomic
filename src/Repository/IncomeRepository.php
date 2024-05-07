@@ -17,14 +17,15 @@ class IncomeRepository
 
         $statement = $pdo->prepare(
             sprintf(
-            'SELECT transaction_id from income WHERE transaction_id in (%s)'
-            , implode(
-                ',',
-                array_fill(0, count($incomes), '?')
-            ))
+                'SELECT transaction_id from income WHERE transaction_id in (%s)',
+                implode(
+                    ',',
+                    array_fill(0, count($incomes), '?')
+                )
+            )
         );
 
-        foreach (array_map(fn($income) => $income->transactionId, $incomes) as $key => $id) {
+        foreach (array_map(fn ($income) => $income->transactionId, $incomes) as $key => $id) {
             $statement->bindValue(($key + 1), $id);
         }
 

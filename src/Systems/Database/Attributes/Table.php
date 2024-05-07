@@ -1,6 +1,7 @@
 <?php
 
 namespace Jegulnomic\Systems\Database\Attributes;
+
 use Attribute;
 
 #[Attribute]

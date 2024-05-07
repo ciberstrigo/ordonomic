@@ -8,7 +8,6 @@ readonly class Money
         public string $amount,
         public string $currency,
         public \DateTimeInterface $date
-    )
-    {
+    ) {
     }
 }

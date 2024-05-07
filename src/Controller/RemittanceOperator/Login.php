@@ -14,8 +14,7 @@ class Login
         if ('POST' === $_SERVER['REQUEST_METHOD']) {
             try {
                 $operator = Authenticator::authenticate($_POST['telegram-user-id'], $_POST['password']);
-            }
-            catch (\Throwable $e) {
+            } catch (\Throwable $e) {
                 Flash::createFlash(
                     'login',
                     $e->getMessage(),

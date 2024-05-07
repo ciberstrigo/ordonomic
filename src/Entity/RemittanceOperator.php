@@ -19,8 +19,7 @@ class RemittanceOperator
         public string $passwordHashed,
         #[Column(name: 'is_verified')]
         public string $isVerified,
-    )
-    {
+    ) {
     }
 
     public function isAllowToProceed()

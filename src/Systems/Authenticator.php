@@ -2,7 +2,6 @@
 
 namespace Jegulnomic\Systems;
 
-use http\Exception\RuntimeException;
 use Jegulnomic\Entity\RemittanceOperator;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Ramsey\Uuid\Uuid;
@@ -14,7 +13,7 @@ class Authenticator
     public static function authenticate(string $telegramUserId, string $password): RemittanceOperator
     {
         if (empty($telegramUserId) || empty($password)) {
-            throw new RuntimeException('No login or password specified');
+            throw new \RuntimeException('No login or password specified');
         }
 
         $operator = self::getRemittanceOperator($telegramUserId);

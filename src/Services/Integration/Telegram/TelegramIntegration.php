@@ -22,8 +22,10 @@ class TelegramIntegration
             throw new \RuntimeException('First argument must be a payload array.');
         }
 
-        $result = Rest::post(sprintf(self::TELEGRAM_API_URL, $this->token, $name),
-            $arguments[0]);
+        $result = Rest::post(
+            sprintf(self::TELEGRAM_API_URL, $this->token, $name),
+            $arguments[0]
+        );
 
         return json_decode($result, true);
     }

@@ -21,7 +21,7 @@ class DatabaseStorage implements StorageInterface
             return self::$instance;
         }
 
-       return self::$instance = new DatabaseStorage();
+        return self::$instance = new DatabaseStorage();
     }
 
     public function getPDO(): PDO
@@ -40,7 +40,8 @@ class DatabaseStorage implements StorageInterface
         $mapped = $this->getPropertiesMapping($object);
         $mappedKeys = array_keys($mapped);
 
-        $sql = sprintf('INSERT INTO %s (%s) VALUES (%s) ON DUPLICATE KEY UPDATE %s',
+        $sql = sprintf(
+            'INSERT INTO %s (%s) VALUES (%s) ON DUPLICATE KEY UPDATE %s',
             $this->getTableName($object), // table name
             $this->getQueryTableFields($object), // fields
             implode(', ', array_map(function ($key) {
@@ -121,7 +122,7 @@ class DatabaseStorage implements StorageInterface
             'SELECT %s FROM %s %s',
             implode(
                 ', ',
-                array_map(fn($column) => sprintf('`%s`', $column), array_keys($mapped))
+                array_map(fn ($column) => sprintf('`%s`', $column), array_keys($mapped))
             ),
             $this->getTableName($class),
             $condition
@@ -166,7 +167,7 @@ class DatabaseStorage implements StorageInterface
                 $inConstructor[] = $fieldName;
             }
 
-            $extractName = fn($element) => $element->getName();
+            $extractName = fn ($element) => $element->getName();
             $x = array_map($extractName, $reflectionClass->getConstructor()->getParameters());
             $y = array_map($extractName, $reflectionClass->getProperties());
             $notInConstructor = array_diff($y, $x);
@@ -224,7 +225,7 @@ class DatabaseStorage implements StorageInterface
     private function getQueryTableFields(object $object): string
     {
         $keys = array_keys($this->getPropertiesMapping($object));
-        $keys = array_map(fn($name) => sprintf('`%s`', $name), $keys);
+        $keys = array_map(fn ($name) => sprintf('`%s`', $name), $keys);
 
         return implode(', ', $keys);
     }

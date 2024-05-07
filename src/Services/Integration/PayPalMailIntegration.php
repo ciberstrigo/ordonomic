@@ -6,7 +6,7 @@ use Jegulnomic\Services\IncomeFromParsedPayPalMailCreator;
 
 class PayPalMailIntegration
 {
-    const int MAILS_COUNT_TO_CHECK = 5;
+    public const int MAILS_COUNT_TO_CHECK = 5;
 
     public static function getIncomes(): array
     {
@@ -25,7 +25,7 @@ class PayPalMailIntegration
                 (
                     $totalMessages - (
                         self::MAILS_COUNT_TO_CHECK > $totalMessages
-                            ? $totalMessages -1
+                            ? $totalMessages - 1
                             : self::MAILS_COUNT_TO_CHECK + 1
                     )
                 ) . ":" . $totalMessages
@@ -45,7 +45,9 @@ class PayPalMailIntegration
                 $mailBody = imap_fetchbody($connection, $mail->msgno, '1.1');
             }
 
-            $mailBody = preg_replace('/\s+/', ' ',
+            $mailBody = preg_replace(
+                '/\s+/',
+                ' ',
                 $mailBody
             );
 

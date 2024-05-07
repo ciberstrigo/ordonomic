@@ -12,8 +12,7 @@ class RemittanceOperatorMessageHandler
     public function __construct(
         readonly private array $update,
         readonly private TelegramIntegration $telegram
-    )
-    {
+    ) {
     }
 
     public function start()
@@ -60,7 +59,7 @@ class RemittanceOperatorMessageHandler
     {
         $this->telegram->sendMessage([
             'chat_id' => $this->update['message']['from']['id'],
-            'text' => json_encode($this->update, JSON_UNESCAPED_UNICODE+JSON_PRETTY_PRINT),
+            'text' => json_encode($this->update, JSON_UNESCAPED_UNICODE + JSON_PRETTY_PRINT),
         ]);
     }
 

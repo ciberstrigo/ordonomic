@@ -17,8 +17,7 @@ class Registration
                 if (null === $operator) {
                     throw new \RuntimeException('Can not register new operator. Server error.');
                 }
-            }
-            catch (\Throwable $e) {
+            } catch (\Throwable $e) {
                 Flash::createFlash(
                     'registration',
                     $e->getMessage(),

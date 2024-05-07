@@ -14,7 +14,7 @@ use Ramsey\Uuid\Uuid;
 
 class WithdrawalCreator
 {
-    const int CALCULATION_ACCURACY = 4;
+    public const int CALCULATION_ACCURACY = 4;
 
     public function create(Income $income): Withdrawal
     {

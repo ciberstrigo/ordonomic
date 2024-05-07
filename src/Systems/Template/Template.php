@@ -2,8 +2,9 @@
 
 namespace Jegulnomic\Systems\Template;
 
-class Template {
-    private $scriptPath='../';
+class Template
+{
+    private $scriptPath = '../';
     public $properties;
     public string $path;
 
@@ -13,7 +14,7 @@ class Template {
 
     public function setScriptPath($scriptPath)
     {
-        $this->scriptPath=$scriptPath;
+        $this->scriptPath = $scriptPath;
     }
 
     public function __construct()
@@ -32,24 +33,28 @@ class Template {
 
         $this->parent || ob_start();
 
-        if(file_exists($this->scriptPath.$filename)){
+        if(file_exists($this->scriptPath.$filename)) {
             include($this->scriptPath.$filename);
-        } else throw new \LogicException('File ' . $this->scriptPath.$filename . ' does not exist.');
+        } else {
+            throw new \LogicException('File ' . $this->scriptPath.$filename . ' does not exist.');
+        }
 
         $result = ob_get_clean();
 
         if ($this->parent) {
-            return (new Template)->render($this->parent, [...$this->blocks, ...$this->properties]);
+            return (new Template())->render($this->parent, [...$this->blocks, ...$this->properties]);
         } else {
             return $result;
         }
     }
 
-    public function __set($k, $v){
+    public function __set($k, $v)
+    {
         $this->properties[$k] = $v;
     }
 
-    public function __get($k){
+    public function __get($k)
+    {
         return array_key_exists($k, $this->properties) ? $this->properties[$k] : '';
     }
 
@@ -64,7 +69,8 @@ class Template {
         ob_start();
     }
 
-    public function endblock() {
+    public function endblock()
+    {
         $this->blocks[array_pop($this->blockContext)] = ob_get_clean();
     }
 

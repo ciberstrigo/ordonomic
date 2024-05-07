@@ -4,12 +4,12 @@ namespace Jegulnomic\Systems\Template;
 
 class Flash
 {
-    const string FLASH = 'FLASH_MESSAGES';
+    public const string FLASH = 'FLASH_MESSAGES';
 
-    const string FLASH_ERROR = 'error';
-    const string FLASH_WARNING = 'warning';
-    const string FLASH_INFO = 'info';
-    const string FLASH_SUCCESS = 'success';
+    public const string FLASH_ERROR = 'error';
+    public const string FLASH_WARNING = 'warning';
+    public const string FLASH_INFO = 'info';
+    public const string FLASH_SUCCESS = 'success';
 
     public static function createFlash(string $name, string $message, string $type): void
     {
@@ -29,18 +29,20 @@ class Flash
         $flash_message = $_SESSION[self::FLASH][$name];
         unset($_SESSION[self::FLASH][$name]);
 
-        return sprintf('<div class="alert alert-%s">%s</div>',
+        return sprintf(
+            '<div class="alert alert-%s">%s</div>',
             $flash_message['type'],
             $flash_message['message']
         );
     }
 
-    public static function flash(string $name = '', string $message = '', string $type = '')
+    public static function flash(string $name = '', string $message = '', string $type = ''): ?string
     {
         if ($name !== '' && $message !== '' && $type !== '') {
             self::createFlash($name, $message, $type);
-        } elseif ($name !== '' && $message === '' && $type === '') {
-            return self::displayFlash($name);
+            return null;
         }
+
+        return self::displayFlash($name);
     }
 }

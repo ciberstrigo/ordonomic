@@ -7,7 +7,8 @@ use Jegulnomic\DTO\GeorgianCentralBankIntegration\Currency;
 
 class DTOCreator
 {
-    const string DATE_FORMAT = 'Y-m-d\TH:i:s.u\Z';
+    public const string DATE_FORMAT = 'Y-m-d\TH:i:s.u\Z';
+
     public static function createCurrencies(array $associative): Currencies
     {
         if (empty($associative)) {

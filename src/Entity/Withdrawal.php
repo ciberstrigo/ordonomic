@@ -31,5 +31,6 @@ class Withdrawal
         public ?RemittanceOperator $sentTo,
         #[Column(name: 'message_id')]
         public ?string $messageId
-    ) {}
+    ) {
+    }
 }

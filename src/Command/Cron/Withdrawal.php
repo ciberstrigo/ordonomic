@@ -45,12 +45,14 @@ class Withdrawal
             throw new \RuntimeException('Error while updating income information '.$e->getMessage());
         }
 
-        $message = trim(sprintf("Отправьте %s получателю (жигуль).
+        $message = trim(sprintf(
+            "Отправьте %s получателю (жигуль).
         
         Id транзакции: %s 
         Принятая сумма: %s %s 
         От: %s 
-        Дата поступления: %s", $income->withdrawal->rubbles,
+        Дата поступления: %s",
+            $income->withdrawal->rubbles,
             $income->transactionId,
             $income->amount,
             $income->currency,

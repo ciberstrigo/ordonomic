@@ -10,8 +10,7 @@ class MoneyCalculator
 {
     public function __construct(
         protected Money $result
-    )
-    {
+    ) {
 
     }
 
