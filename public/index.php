@@ -9,5 +9,6 @@ require_once 'exception_handler.php';
 
 
 $requestPath = explode('?', $_SERVER['REQUEST_URI']);
-$parsed = []; parse_str($requestPath[1] ?? '', $parsed);
+$parsed = [];
+parse_str($requestPath[1] ?? '', $parsed);
 load_controller($requestPath[0], $parsed);

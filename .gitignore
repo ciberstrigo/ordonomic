@@ -15,4 +15,6 @@
 .env.test
 .env.prod
 
+# cs fixer
+.php-cs-fixer.cache
 

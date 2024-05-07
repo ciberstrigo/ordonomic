@@ -1,18 +1,22 @@
 <?php
-function load_controller(string $path, array $parameters) {
+
+function load_controller(string $path, array $parameters)
+{
     $result = preg_replace_callback(
         '/((\/|-)[a-z])/i',
-        function($word) {
+        function ($word) {
             return ('/' === $word[1][0] ? '\\' : '') . strtoupper($word[1][1]);
         },
-    $path);
+        $path
+    );
 
     $regexpToSearchMethod = '/\\\[A-Za-z0-9]+$/';
     $classPath = "Jegulnomic\Controller" . preg_replace($regexpToSearchMethod, '', $result);
 
     if (!preg_match($regexpToSearchMethod, $result, $matches)) {
         http_response_code(404);
-        echo('not found' . PHP_EOL);die;
+        echo('not found' . PHP_EOL);
+        die;
     }
 
     $methodName = lcfirst(ltrim($matches[0], '\\'));
@@ -29,5 +33,5 @@ function load_controller(string $path, array $parameters) {
         return;
     }
 
-    echo (new $classPath)->$methodName();
+    echo (new $classPath())->$methodName();
 }
