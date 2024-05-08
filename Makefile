@@ -22,4 +22,7 @@ shell:
 e:
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) sh -c '$(CMD)'
 
-.PHONY: help start stop fix shell
+operator__webhook_update:
+	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) sh -c 'bin/console Telegram\\UpdateWebhook forRemittanceOperator'
+
+.PHONY: help start stop fix shell operator__webhook_update

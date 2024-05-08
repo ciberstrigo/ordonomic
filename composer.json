@@ -22,7 +22,9 @@
         "paypal/rest-api-sdk-php": "^1.14",
         "ext-dom": "*",
         "ext-imap": "*",
-        "phpmailer/phpmailer": "^6.9"
+        "phpmailer/phpmailer": "^6.9",
+        "ext-xml": "*",
+        "ext-simplexml": "*"
     },
     "config": {
         "allow-plugins": {

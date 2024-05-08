@@ -8,12 +8,12 @@ $className = '\Jegulnomic\Command\\' . $argv[1];
 $methodName = $argv[2];
 
 if (!class_exists($className)) {
-    \Jegulnomic\Systems\Command::output('No such command class');
+    \Jegulnomic\Systems\Command::output('No such command class: ' . $className);
     die;
 }
 
 if (!method_exists($className, $methodName)) {
-    \Jegulnomic\Systems\Command::output('No such command method');
+    \Jegulnomic\Systems\Command::output('No such command method: ' . $methodName);
     die;
 }
 
