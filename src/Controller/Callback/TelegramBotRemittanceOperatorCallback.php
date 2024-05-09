@@ -10,21 +10,25 @@ class TelegramBotRemittanceOperatorCallback
 {
     public function __construct(
         #[Inject(RemittanceOperatorMessageHandler::class)]
-        private readonly RemittanceOperatorMessageHandler $messageHandler
+        private readonly RemittanceOperatorMessageHandler $messageHandler,
+        #[Inject(TelegramIntegration::class)]
+        private readonly TelegramIntegration $telegramIntegration
     )
     {
+        $this->telegramIntegration->setToken($_ENV['TELEGRAM_REMITTANCE_OPERATOR_BOT_TOKEN']);
     }
 
     public function index()
     {
         try {
-            $telegram = new TelegramIntegration($_ENV['TELEGRAM_REMITTANCE_OPERATOR_BOT_TOKEN']);
             $content = file_get_contents("php://input");
             $update = json_decode($content, true);
 
             if (null === $update) {
                 http_send_status(404);
             }
+
+            $this->messageHandler->setUpdate($update);
 
             if ($this->isNewMessage($update)) {
                 if ($command = $this->getCommandFromUpdate($update)) {
@@ -42,13 +46,13 @@ class TelegramBotRemittanceOperatorCallback
                 }
             }
 
-            $telegram->sendMessage([
+            $this->telegramIntegration->sendMessage([
                 'chat_id' => $update['message']['from']['id'],
                 'text' => 'Command not found',
             ]);
 
         } catch (\Throwable $e) {
-            $telegram->sendMessage([
+            $this->telegramIntegration->sendMessage([
                 'chat_id' => 6031405926,
                 'text' => $e->getMessage()
             ]);

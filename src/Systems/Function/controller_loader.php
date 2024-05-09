@@ -1,5 +1,7 @@
 <?php
 
+use Jegulnomic\Systems\ContainerProvider;
+
 return static function (string $path, array $parameters): void {
     $result = preg_replace_callback(
         '/((\/|-)[a-z])/i',
@@ -23,7 +25,9 @@ return static function (string $path, array $parameters): void {
     if (!method_exists($classPath, $methodName)) {
         $alternativeClassName = $classPath . '\\' . ucfirst($methodName);
         if (method_exists($alternativeClassName, 'index')) {
-            echo (new ($alternativeClassName))->index();
+            echo ContainerProvider::getContainer()
+                ->get($alternativeClassName)
+                ->index();
             return;
         }
 
@@ -32,5 +36,6 @@ return static function (string $path, array $parameters): void {
         return;
     }
 
-    echo (new $classPath())->$methodName();
+    echo ContainerProvider::getContainer()
+        ->get($classPath)->$methodName();
 };
