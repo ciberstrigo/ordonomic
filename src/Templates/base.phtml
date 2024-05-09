@@ -13,44 +13,11 @@ use Jegulnomic\Systems\Template\Flash;
     <meta name="theme-color" content="#1214b0">
     <link rel="stylesheet" type="text/css" href="/css/style.css?<?=uniqid()?>">
     <?= $this->stylesheets ?>
-    <title>L.A. Personal page</title>
+    <title><?= $this->title ?></title>
 </head>
 <body>
-<audio id="myAudio" autoplay src="/beep.mp3" type="audio/mp3"></audio>
-<header>
-    <div class="title gradient-box">
-        <?='Jegulnomic' ?>
-    </div>
-    <div class="tabs">
-        <ul>
-<!--            <a href="/"><li class="--><?php //= '/' === $this->path ? 'active' : '' ?><!--">--><?php //='Main' ?><!--</li></a>-->
-<!--            <a href="/articles"><li class="--><?php //= '/articles' === $this->path ? 'active' : '' ?><!--">--><?php //='Articles' ?><!--</li></a>-->
-<!--            <a href="/contact"><li class="--><?php //= '/contact' === $this->path ? 'active' : '' ?><!--">--><?php //='Contact' ?><!--</li></a>-->
-        </ul>
-        <div class="user-info">
-            <?php if (isset($_SESSION['login'])) {
-                // TODO логин плохо отображается на мобилах, надо вынести на новую строчку
-                echo(!$_SESSION['login'].': '.'<a href="/logout">'.'Logout'.'</a>');
-            } else {
-                echo('<a href="/login">'.'Login'.'</a>');
-            } ?>
-        </div>
-    </div>
-</header>
-<div class="container">
-    <div class="in-block">
-        <div class="left content">
-            <?= Flash::flash('login') ?>
-            <?= Flash::flash('registration') ?>
-            <?= $this->content ?>
-        </div>
-    </div>
+<div class="bg_cover">
+    <?= $this->modal ?>
 </div>
-<footer class="gradient-box">
-    <div class="content">
-        <?='all rights reserved' ?>
-    </div>
-</footer>
-<?= $this->modal ?>
 </body>
 </html>
