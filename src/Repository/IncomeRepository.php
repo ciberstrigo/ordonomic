@@ -7,13 +7,13 @@ use Jegulnomic\Entity\Income;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
 
-class IncomeRepository
+readonly class IncomeRepository
 {
     public function __construct(
         #[Inject(DatabaseStorage::class)]
-        private readonly StorageInterface $storage
-    )
-    {}
+        private StorageInterface $storage
+    ) {
+    }
 
     public function filterNewIncomes(array $incomes): array
     {

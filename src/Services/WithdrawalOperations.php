@@ -8,13 +8,13 @@ use Jegulnomic\Enum\Withdrawal\Status;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
 
-class WithdrawalOperations
+readonly class WithdrawalOperations
 {
     public function __construct(
         #[Inject(DatabaseStorage::class)]
-        private readonly StorageInterface $storage
-    )
-    {}
+        private StorageInterface $storage
+    ) {
+    }
 
     public function confirm(Withdrawal $withdrawal): string
     {

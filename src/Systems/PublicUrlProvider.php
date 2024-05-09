@@ -5,13 +5,12 @@ namespace Jegulnomic\Systems;
 use DI\Attribute\Inject;
 use Jegulnomic\Systems\Controller\ControllerManager;
 
-class PublicUrlProvider
+readonly class PublicUrlProvider
 {
     public function __construct(
         #[Inject(ControllerManager::class)]
-        private readonly ControllerManager $controllerManager
-    )
-    {
+        private ControllerManager $controllerManager
+    ) {
     }
 
     public function getUrl()

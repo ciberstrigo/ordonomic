@@ -6,15 +6,14 @@ use DI\Attribute\Inject;
 use Jegulnomic\Services\Integration\Telegram\RemittanceOperatorMessageHandler;
 use Jegulnomic\Services\Integration\Telegram\TelegramIntegration;
 
-class TelegramBotRemittanceOperatorCallback
+readonly class TelegramBotRemittanceOperatorCallback
 {
     public function __construct(
         #[Inject(RemittanceOperatorMessageHandler::class)]
-        private readonly RemittanceOperatorMessageHandler $messageHandler,
+        private RemittanceOperatorMessageHandler $messageHandler,
         #[Inject(TelegramIntegration::class)]
-        private readonly TelegramIntegration $telegramIntegration
-    )
-    {
+        private TelegramIntegration $telegramIntegration
+    ) {
         $this->telegramIntegration->setToken($_ENV['TELEGRAM_REMITTANCE_OPERATOR_BOT_TOKEN']);
     }
 

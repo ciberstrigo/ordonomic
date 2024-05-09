@@ -4,11 +4,11 @@ namespace Jegulnomic\Command;
 
 use Jegulnomic\Systems\StorageInterface;
 
-class AbstractCommand
+readonly class AbstractCommand
 {
-    private array $arguments = [];
+    private array $arguments;
 
-    public function setArguments(array $arguments): self
+    public function setArguments(?array $arguments = []): self
     {
         if (!empty($this->arguments)) {
             throw new \LogicException('This is not possible to set command arguments many times.');

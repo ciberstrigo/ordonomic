@@ -5,15 +5,15 @@ namespace Jegulnomic\Services\Integration;
 use DI\Attribute\Inject;
 use Jegulnomic\Services\IncomeFromParsedPayPalMailCreator;
 
-class PayPalMailIntegration
+readonly class PayPalMailIntegration
 {
     public const int MAILS_COUNT_TO_CHECK = 5;
 
     public function __construct(
         #[Inject(IncomeFromParsedPayPalMailCreator::class)]
-        private readonly IncomeFromParsedPayPalMailCreator $incomeCreator,
-    )
-    {}
+        private IncomeFromParsedPayPalMailCreator $incomeCreator,
+    ) {
+    }
 
     public function getIncomes(): array
     {

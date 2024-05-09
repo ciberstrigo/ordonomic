@@ -9,15 +9,15 @@ use Jegulnomic\Systems\Command;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
 
-class RemittanceOperator extends AbstractCommand
+readonly class RemittanceOperator extends AbstractCommand
 {
     public function __construct(
         #[Inject(DatabaseStorage::class)]
-        private readonly StorageInterface $storage,
+        private StorageInterface $storage,
         #[Inject(TelegramIntegration::class)]
-        private readonly TelegramIntegration $telegramIntegration
-    )
-    {}
+        private TelegramIntegration $telegramIntegration
+    ) {
+    }
 
     public function approve(): void
     {

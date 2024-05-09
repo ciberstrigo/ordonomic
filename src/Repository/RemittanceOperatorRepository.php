@@ -7,13 +7,13 @@ use Jegulnomic\Entity\RemittanceOperator;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
 
-class RemittanceOperatorRepository
+readonly class RemittanceOperatorRepository
 {
     public function __construct(
         #[Inject(DatabaseStorage::class)]
-        private readonly StorageInterface $storage
-    )
-    {}
+        private StorageInterface $storage
+    ) {
+    }
 
     public function getOperator(): ?RemittanceOperator
     {

@@ -5,7 +5,7 @@ namespace Jegulnomic\Services\Integration\Telegram;
 use DI\Attribute\Inject;
 use Jegulnomic\Systems\Rest;
 
-class TelegramIntegration
+readonly class TelegramIntegration
 {
     private const string TELEGRAM_API_URL = 'https://api.telegram.org/bot%s/%s';
 
@@ -13,9 +13,9 @@ class TelegramIntegration
 
     public function __construct(
         #[Inject(Rest::class)]
-        private readonly Rest $rest
-    )
-    {}
+        private Rest $rest
+    ) {
+    }
 
     public function setToken(string $token): self
     {

@@ -9,15 +9,15 @@ use Jegulnomic\Services\Integration\Telegram\TelegramIntegration;
 use Jegulnomic\Systems\Command;
 use Jegulnomic\Systems\PublicUrlProvider;
 
-class UpdateWebhook extends AbstractCommand
+readonly class UpdateWebhook extends AbstractCommand
 {
     public function __construct(
         #[Inject(PublicUrlProvider::class)]
-        private readonly PublicUrlProvider $publicUrlProvider,
+        private PublicUrlProvider $publicUrlProvider,
         #[Inject(TelegramIntegration::class)]
-        private readonly TelegramIntegration $telegramIntegration
-    )
-    {}
+        private TelegramIntegration $telegramIntegration
+    ) {
+    }
 
     public function forRemittanceOperator()
     {

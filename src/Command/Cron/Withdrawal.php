@@ -12,21 +12,21 @@ use Jegulnomic\Systems\Command;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
 
-class Withdrawal extends AbstractCommand
+readonly class Withdrawal extends AbstractCommand
 {
     public function __construct(
         #[Inject(DatabaseStorage::class)]
-        private readonly StorageInterface $storage,
+        private StorageInterface $storage,
         #[Inject(IncomeRepository::class)]
-        private readonly IncomeRepository $incomeRepository,
+        private IncomeRepository $incomeRepository,
         #[Inject(WithdrawalCreator::class)]
-        private readonly WithdrawalCreator $withdrawalCreator,
+        private WithdrawalCreator $withdrawalCreator,
         #[Inject(RemittanceOperatorRepository::class)]
-        private readonly RemittanceOperatorRepository $operatorRepository,
+        private RemittanceOperatorRepository $operatorRepository,
         #[Inject(TelegramIntegration::class)]
-        private readonly TelegramIntegration $telegramIntegration,
-    )
-    {}
+        private TelegramIntegration $telegramIntegration,
+    ) {
+    }
 
     public function createAndNotifyOperator()
     {

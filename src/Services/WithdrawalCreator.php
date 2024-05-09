@@ -14,19 +14,19 @@ use Jegulnomic\Systems\StorageInterface;
 use Jegulnomic\ValueObject\Money;
 use Ramsey\Uuid\Uuid;
 
-class WithdrawalCreator
+readonly class WithdrawalCreator
 {
     public const int CALCULATION_ACCURACY = 4;
 
     public function __construct(
         #[Inject(DatabaseStorage::class)]
-        private readonly StorageInterface $storage,
+        private StorageInterface $storage,
         #[Inject(LariConverter::class)]
-        private readonly LariConverter $lariConverter,
+        private LariConverter $lariConverter,
         #[Inject(GeorgianCentralBankIntegration::class)]
-        private readonly GeorgianCentralBankIntegration $georgianCentralBankIntegration,
-    )
-    {}
+        private GeorgianCentralBankIntegration $georgianCentralBankIntegration,
+    ) {
+    }
 
     public function create(Income $income): Withdrawal
     {

@@ -9,17 +9,17 @@ use Jegulnomic\Systems\DTOCreator;
 use Jegulnomic\Systems\Rest;
 use Jegulnomic\Systems\StorageInterface;
 
-class GeorgianCentralBankIntegration
+readonly class GeorgianCentralBankIntegration
 {
     public function __construct(
         #[Inject(DatabaseStorage::class)]
-        protected readonly StorageInterface $storage,
+        protected StorageInterface $storage,
         #[Inject(Rest::class)]
-        protected readonly Rest $rest,
+        protected Rest $rest,
         #[Inject(DTOCreator::class)]
-        protected readonly DTOCreator $DTOCreator,
-    )
-    {}
+        protected DTOCreator $DTOCreator,
+    ) {
+    }
 
     public function getCurrency(string $currency, \DateTimeInterface $date): Currency
     {

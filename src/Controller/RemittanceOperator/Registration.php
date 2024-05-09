@@ -8,13 +8,12 @@ use Jegulnomic\Systems\Authenticator;
 use Jegulnomic\Systems\Template\Flash;
 use Jegulnomic\Systems\Template\Template;
 
-class Registration
+readonly class Registration
 {
     public function __construct(
         #[Inject(TelegramIntegration::class)]
-        private readonly TelegramIntegration $telegramIntegration
-    )
-    {
+        private TelegramIntegration $telegramIntegration
+    ) {
     }
     public function index()
     {
