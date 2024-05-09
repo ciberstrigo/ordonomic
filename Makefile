@@ -22,6 +22,9 @@ shell:
 e:
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) sh -c '$(CMD)'
 
+require:
+	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) sh -c 'composer require $(CMD)'
+
 operator__webhook_update:
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) sh -c 'bin/console Telegram\\UpdateWebhook forRemittanceOperator'
 

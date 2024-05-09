@@ -8,13 +8,13 @@ use Ramsey\Uuid\Uuid;
 
 class IncomeFromParsedPayPalMailCreator
 {
-    public static function create(
+    public function create(
         string $transactionId,
         string $money,
         string $date,
         string $from,
     ): Income {
-        $moneyValueObject = self::createMoneyFromString($money, $date);
+        $moneyValueObject = $this->createMoneyFromString($money, $date);
 
         return new Income(
             UUID::uuid4(),
@@ -27,7 +27,7 @@ class IncomeFromParsedPayPalMailCreator
         );
     }
 
-    private static function createMoneyFromString(string $money, string $date): Money
+    private function createMoneyFromString(string $money, string $date): Money
     {
         // ["USD"]
         if (!preg_match('/[A-Z]+$/u', $money, $currencyMatches)) {

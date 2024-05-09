@@ -2,23 +2,27 @@
 
 <?php $this->extend('src/Templates/base.phtml') ?>
 <?php $this->block('modal') ?>
-    <div class="login-window modal">
-        <h1>Login</h1>
-        <form action="/remittance-operator/login" method="POST">
-            <?=Flash::flash('login') ?>
+    <form class="main-form first" action="/remittance-operator/login" method="post">
+        <div class="main-form__title">
+            <h1> Login</h1>
+            <h2>Войдите для продолжения работы в системе</h2>
+        </div>
 
-            <label for="telegram-user-id">Telegram user id:</label>
-            <input
-                name="telegram-user-id"
-                id="telegram-user-id"
-                type="text"
-                class="textable"
-                value="<?=$_GET['telegram_user_id'] ?? $_POST['telegram-user-id']?>"
-            />
+        <?=Flash::flash('login') ?>
 
-            <label for="password">Password:</label>
-            <input name="password" id="password" type="password" class="textable"/>
-            <input type="submit" name="Login"/>
-        </form>
-    </div>
+        <div class="main-form__body">
+            <input class="main-form__body--input"
+                   name="telegram-user-id"
+                   id="telegram-user-id"
+                   type="text"
+                   placeholder="Telegram user id"
+                   readonly="readonly"
+                   value="<?= $_GET['telegram_user_id'] ?? $_POST['telegram-user-id']?>" /> &#x9;
+            <input class="main-form__body--input"
+                   name="password"
+                   type="password"
+                   placeholder="Password" />&#x9; &#x9;
+            <button class="btn full_btn" name="submit-login">Login</button>
+        </div>
+    </form>
 <?php $this->endblock() ?>

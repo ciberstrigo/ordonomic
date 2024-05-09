@@ -2,13 +2,20 @@
 
 namespace Jegulnomic\Services\Integration;
 
+use DI\Attribute\Inject;
 use Jegulnomic\Services\IncomeFromParsedPayPalMailCreator;
 
-class PayPalMailIntegration
+readonly class PayPalMailIntegration
 {
     public const int MAILS_COUNT_TO_CHECK = 5;
 
-    public static function getIncomes(): array
+    public function __construct(
+        #[Inject(IncomeFromParsedPayPalMailCreator::class)]
+        private IncomeFromParsedPayPalMailCreator $incomeCreator,
+    ) {
+    }
+
+    public function getIncomes(): array
     {
         $connection = \imap_open(
             $_ENV['IMAP_SERVER'],
@@ -62,13 +69,13 @@ class PayPalMailIntegration
                 continue;
             }
 
-            $transactionId = self::catch(
+            $transactionId = $this->catch(
                 $mailBody,
                 'Transaction ID',
                 '[0-9A-Za-z]+'
             );
 
-            $transactionDate = self::catch(
+            $transactionDate = $this->catch(
                 $mailBody,
                 'Transaction date',
                 '[0-9]{1,2} [A-Z][a-z]+ [0-9]{4}'
@@ -85,7 +92,7 @@ class PayPalMailIntegration
                 continue;
             }
 
-            $incomes[] = IncomeFromParsedPayPalMailCreator::create(
+            $incomes[] = $this->incomeCreator->create(
                 $transactionId,
                 $transactionAmount,
                 $transactionDate,
@@ -98,7 +105,7 @@ class PayPalMailIntegration
         return $incomes;
     }
 
-    private static function catch(string $from, string $name, string $valueExpr): ?string
+    private function catch(string $from, string $name, string $valueExpr): ?string
     {
         $regex = '/\*?'.$name.'\*?\s+('.$valueExpr.')/u';
         if (preg_match($regex, $from, $matches)) {

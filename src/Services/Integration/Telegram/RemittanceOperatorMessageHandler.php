@@ -2,17 +2,32 @@
 
 namespace Jegulnomic\Services\Integration\Telegram;
 
+use DI\Attribute\Inject;
 use Jegulnomic\Entity\Withdrawal;
 use Jegulnomic\Services\WithdrawalOperations;
 use Jegulnomic\Systems\Authenticator;
 use Jegulnomic\Systems\Database\DatabaseStorage;
+use Jegulnomic\Systems\StorageInterface;
 
 class RemittanceOperatorMessageHandler
 {
+    private array $update;
+
     public function __construct(
-        readonly private array $update,
-        readonly private TelegramIntegration $telegram
+        #[Inject(TelegramIntegration::class)]
+        readonly private TelegramIntegration $telegram,
+        #[Inject(WithdrawalOperations::class)]
+        readonly private WithdrawalOperations $withdrawalOperations,
+        #[Inject(DatabaseStorage::class)]
+        readonly private StorageInterface $storage,
     ) {
+    }
+
+    public function setUpdate(array $update): self
+    {
+        $this->update = $update;
+
+        return $this;
     }
 
     public function start()
@@ -84,7 +99,7 @@ class RemittanceOperatorMessageHandler
             return;
         }
 
-        $withdrawal = DatabaseStorage::i()->getOne(
+        $withdrawal = $this->storage->getOne(
             Withdrawal::class,
             'WHERE id = :id',
             [':id' => $withdrawalId]
@@ -94,7 +109,7 @@ class RemittanceOperatorMessageHandler
             return;
         }
 
-        $response = (new WithdrawalOperations())->$withdrawalAction($withdrawal);
+        $response = $this->withdrawalOperations->$withdrawalAction($withdrawal);
 
         $r = $this->telegram->editMessageText([
             'chat_id' => $this->update['callback_query']['message']['chat']['id'],

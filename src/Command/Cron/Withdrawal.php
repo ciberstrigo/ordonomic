@@ -2,29 +2,44 @@
 
 namespace Jegulnomic\Command\Cron;
 
+use DI\Attribute\Inject;
+use Jegulnomic\Command\AbstractCommand;
 use Jegulnomic\Repository\IncomeRepository;
 use Jegulnomic\Repository\RemittanceOperatorRepository;
 use Jegulnomic\Services\Integration\Telegram\TelegramIntegration;
 use Jegulnomic\Services\WithdrawalCreator;
 use Jegulnomic\Systems\Command;
 use Jegulnomic\Systems\Database\DatabaseStorage;
+use Jegulnomic\Systems\StorageInterface;
 
-class Withdrawal
+readonly class Withdrawal extends AbstractCommand
 {
+    public function __construct(
+        #[Inject(DatabaseStorage::class)]
+        private StorageInterface $storage,
+        #[Inject(IncomeRepository::class)]
+        private IncomeRepository $incomeRepository,
+        #[Inject(WithdrawalCreator::class)]
+        private WithdrawalCreator $withdrawalCreator,
+        #[Inject(RemittanceOperatorRepository::class)]
+        private RemittanceOperatorRepository $operatorRepository,
+        #[Inject(TelegramIntegration::class)]
+        private TelegramIntegration $telegramIntegration,
+    ) {
+    }
+
     public function createAndNotifyOperator()
     {
         // deps
-        $income = IncomeRepository::getUnpayedIncome();
+        $income = $this->incomeRepository->getUnpayedIncome();
 
         if (null === $income) {
             Command::output('No unpaid incomes.');
             return;
         }
 
-        $withdrawalCreator = new WithdrawalCreator();
-        $telegram = new TelegramIntegration($_ENV['TELEGRAM_REMITTANCE_OPERATOR_BOT_TOKEN']);
-        $operator = RemittanceOperatorRepository::getOperator();
-        $databaseStorage = DatabaseStorage::i();
+        $telegram = $this->telegramIntegration->setToken($_ENV['TELEGRAM_REMITTANCE_OPERATOR_BOT_TOKEN']);
+        $operator = $this->operatorRepository->getOperator();
 
         if (!$operator) {
             Command::output('No operators at work.');
@@ -32,7 +47,7 @@ class Withdrawal
         }
 
         try {
-            $income->withdrawal = $withdrawalCreator->create($income);
+            $income->withdrawal = $this->withdrawalCreator->create($income);
         } catch (\Throwable $e) {
             throw new \RuntimeException('Error while creating withdrawal '.$e->getMessage());
         }
@@ -40,7 +55,7 @@ class Withdrawal
         $income->withdrawal->sentTo = $operator;
 
         try {
-            $databaseStorage->save($income);
+            $this->storage->save($income);
         } catch (\Throwable $e) {
             throw new \RuntimeException('Error while updating income information '.$e->getMessage());
         }
@@ -81,7 +96,7 @@ class Withdrawal
 
         try {
             $income->withdrawal->messageId = $tgResult['result']['message_id'];
-            $databaseStorage->save($income);
+            $this->storage->save($income);
         } catch (\Throwable $e) {
             throw new \RuntimeException('Error while updating income information '.$e->getMessage());
         }

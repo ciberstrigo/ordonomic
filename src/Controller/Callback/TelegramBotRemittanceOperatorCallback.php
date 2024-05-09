@@ -2,15 +2,24 @@
 
 namespace Jegulnomic\Controller\Callback;
 
+use DI\Attribute\Inject;
 use Jegulnomic\Services\Integration\Telegram\RemittanceOperatorMessageHandler;
 use Jegulnomic\Services\Integration\Telegram\TelegramIntegration;
 
-class TelegramBotRemittanceOperatorCallback
+readonly class TelegramBotRemittanceOperatorCallback
 {
+    public function __construct(
+        #[Inject(RemittanceOperatorMessageHandler::class)]
+        private RemittanceOperatorMessageHandler $messageHandler,
+        #[Inject(TelegramIntegration::class)]
+        private TelegramIntegration $telegramIntegration
+    ) {
+        $this->telegramIntegration->setToken($_ENV['TELEGRAM_REMITTANCE_OPERATOR_BOT_TOKEN']);
+    }
+
     public function index()
     {
         try {
-            $telegram = new TelegramIntegration($_ENV['TELEGRAM_REMITTANCE_OPERATOR_BOT_TOKEN']);
             $content = file_get_contents("php://input");
             $update = json_decode($content, true);
 
@@ -18,31 +27,31 @@ class TelegramBotRemittanceOperatorCallback
                 http_send_status(404);
             }
 
-            $integration = new RemittanceOperatorMessageHandler($update, $telegram);
+            $this->messageHandler->setUpdate($update);
 
             if ($this->isNewMessage($update)) {
                 if ($command = $this->getCommandFromUpdate($update)) {
-                    if (method_exists($integration, $command)) {
-                        $integration->$command();
+                    if (method_exists($this->messageHandler, $command)) {
+                        $this->messageHandler->$command();
                         return;
                     }
                 }
             }
 
             if ($this->isCallbackQuery($update)) {
-                if (method_exists($integration, 'callbackQuery')) {
-                    $integration->callbackQuery();
+                if (method_exists($this->messageHandler, 'callbackQuery')) {
+                    $this->messageHandler->callbackQuery();
                     return;
                 }
             }
 
-            $telegram->sendMessage([
+            $this->telegramIntegration->sendMessage([
                 'chat_id' => $update['message']['from']['id'],
                 'text' => 'Command not found',
             ]);
 
         } catch (\Throwable $e) {
-            $telegram->sendMessage([
+            $this->telegramIntegration->sendMessage([
                 'chat_id' => 6031405926,
                 'text' => $e->getMessage()
             ]);

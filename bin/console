@@ -1,20 +1,27 @@
 #!/usr/bin/env php
 <?php
-require_once 'vendor/autoload.php';
 
-(Dotenv\Dotenv::createImmutable(__DIR__ . '/..'))->load();
+use Jegulnomic\Command\AbstractCommand;
+use Jegulnomic\Systems\Command;
+
+const ENTRYPOINT_DIR = __DIR__;
+
+require_once ENTRYPOINT_DIR . '/../src/Systems/Function/bootstrap.php';
 
 $className = '\Jegulnomic\Command\\' . $argv[1];
 $methodName = $argv[2];
 
 if (!class_exists($className)) {
-    \Jegulnomic\Systems\Command::output('No such command class: ' . $className);
+    Command::output('No such command class: ' . $className);
     die;
 }
 
 if (!method_exists($className, $methodName)) {
-    \Jegulnomic\Systems\Command::output('No such command method: ' . $methodName);
+    Command::output('No such command method: ' . $methodName);
     die;
 }
 
-(new $className(array_slice($argv, 3)))->$methodName();
+$container = \Jegulnomic\Systems\ContainerProvider::getContainer();
+/** @var AbstractCommand $instance */
+$instance = $container->get($className);
+$instance->setArguments(array_slice($argv, 3))->$methodName();

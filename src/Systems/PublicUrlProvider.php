@@ -2,11 +2,18 @@
 
 namespace Jegulnomic\Systems;
 
+use DI\Attribute\Inject;
 use Jegulnomic\Systems\Controller\ControllerManager;
 
-class PublicUrlProvider
+readonly class PublicUrlProvider
 {
-    public static function getUrl()
+    public function __construct(
+        #[Inject(ControllerManager::class)]
+        private ControllerManager $controllerManager
+    ) {
+    }
+
+    public function getUrl()
     {
         if ('DEV' === strtoupper($_ENV['APP_ENV'])) {
             $result = Rest::get('http://ngrok:4040/api/tunnels');
@@ -18,8 +25,8 @@ class PublicUrlProvider
         return $_ENV['PROD_BASE_URL'];
     }
 
-    public static function getTelegramWebhookUrl(string $webhookController): string
+    public function getTelegramWebhookUrl(string $webhookController): string
     {
-        return self::getUrl() . ControllerManager::getUrlPath($webhookController);
+        return self::getUrl() . $this->controllerManager->getUrlPath($webhookController);
     }
 }
