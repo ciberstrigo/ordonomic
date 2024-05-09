@@ -1,7 +1,6 @@
 <?php
 
-function load_controller(string $path, array $parameters)
-{
+return static function (string $path, array $parameters): void {
     $result = preg_replace_callback(
         '/((\/|-)[a-z])/i',
         function ($word) {
@@ -34,4 +33,4 @@ function load_controller(string $path, array $parameters)
     }
 
     echo (new $classPath())->$methodName();
-}
+};

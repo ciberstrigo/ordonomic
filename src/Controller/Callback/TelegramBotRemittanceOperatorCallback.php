@@ -2,11 +2,19 @@
 
 namespace Jegulnomic\Controller\Callback;
 
+use DI\Attribute\Inject;
 use Jegulnomic\Services\Integration\Telegram\RemittanceOperatorMessageHandler;
 use Jegulnomic\Services\Integration\Telegram\TelegramIntegration;
 
 class TelegramBotRemittanceOperatorCallback
 {
+    public function __construct(
+        #[Inject(RemittanceOperatorMessageHandler::class)]
+        private readonly RemittanceOperatorMessageHandler $messageHandler
+    )
+    {
+    }
+
     public function index()
     {
         try {
@@ -18,20 +26,18 @@ class TelegramBotRemittanceOperatorCallback
                 http_send_status(404);
             }
 
-            $integration = new RemittanceOperatorMessageHandler($update, $telegram);
-
             if ($this->isNewMessage($update)) {
                 if ($command = $this->getCommandFromUpdate($update)) {
-                    if (method_exists($integration, $command)) {
-                        $integration->$command();
+                    if (method_exists($this->messageHandler, $command)) {
+                        $this->messageHandler->$command();
                         return;
                     }
                 }
             }
 
             if ($this->isCallbackQuery($update)) {
-                if (method_exists($integration, 'callbackQuery')) {
-                    $integration->callbackQuery();
+                if (method_exists($this->messageHandler, 'callbackQuery')) {
+                    $this->messageHandler->callbackQuery();
                     return;
                 }
             }

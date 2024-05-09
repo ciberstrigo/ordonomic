@@ -24,7 +24,8 @@
         "ext-imap": "*",
         "phpmailer/phpmailer": "^6.9",
         "ext-xml": "*",
-        "ext-simplexml": "*"
+        "ext-simplexml": "*",
+        "php-di/php-di": "^7.0"
     },
     "config": {
         "allow-plugins": {

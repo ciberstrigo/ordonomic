@@ -2,6 +2,7 @@
 
 namespace Jegulnomic\Services;
 
+use DI\Attribute\Inject;
 use Jegulnomic\Entity\Income;
 use Jegulnomic\Entity\Withdrawal;
 use Jegulnomic\Enum\Currencies;
@@ -9,6 +10,7 @@ use Jegulnomic\Enum\Withdrawal\Status;
 use Jegulnomic\Services\Integration\GeorgianCentralBankIntegration;
 use Jegulnomic\Systems\Calculator\DecimalCalculator;
 use Jegulnomic\Systems\Database\DatabaseStorage;
+use Jegulnomic\Systems\StorageInterface;
 use Jegulnomic\ValueObject\Money;
 use Ramsey\Uuid\Uuid;
 
@@ -16,10 +18,20 @@ class WithdrawalCreator
 {
     public const int CALCULATION_ACCURACY = 4;
 
+    public function __construct(
+        #[Inject(DatabaseStorage::class)]
+        private readonly StorageInterface $storage,
+        #[Inject(LariConverter::class)]
+        private readonly LariConverter $lariConverter,
+        #[Inject(GeorgianCentralBankIntegration::class)]
+        private readonly GeorgianCentralBankIntegration $georgianCentralBankIntegration,
+    )
+    {}
+
     public function create(Income $income): Withdrawal
     {
-        $rateToLari = GeorgianCentralBankIntegration::getCurrency($income->currency, $income->date)->getRate();
-        $lari = LariConverter::convertTo(
+        $rateToLari = $this->georgianCentralBankIntegration->getCurrency($income->currency, $income->date)->getRate();
+        $lari = $this->lariConverter->convertTo(
             Currencies::GEL,
             $income->getMoney(),
             $rateToLari
@@ -46,7 +58,7 @@ class WithdrawalCreator
             $income->date
         );
 
-        $lariToRub = GeorgianCentralBankIntegration::getCurrency(
+        $lariToRub = $this->georgianCentralBankIntegration->getCurrency(
             Currencies::RUB,
             $income->date
         )->getRate();
@@ -74,7 +86,7 @@ class WithdrawalCreator
             null
         );
 
-        DatabaseStorage::i()->save($withdrawal);
+        $this->storage->save($withdrawal);
 
         return $withdrawal;
     }

@@ -2,6 +2,7 @@
 
 namespace Jegulnomic\Services;
 
+use DI\Attribute\Inject;
 use Jegulnomic\Entity\Withdrawal;
 use Jegulnomic\Enum\Withdrawal\Status;
 use Jegulnomic\Systems\Database\DatabaseStorage;
@@ -9,12 +10,11 @@ use Jegulnomic\Systems\StorageInterface;
 
 class WithdrawalOperations
 {
-    private StorageInterface $storage;
-
-    public function __construct()
-    {
-        $this->storage = DatabaseStorage::i();
-    }
+    public function __construct(
+        #[Inject(DatabaseStorage::class)]
+        private readonly StorageInterface $storage
+    )
+    {}
 
     public function confirm(Withdrawal $withdrawal): string
     {

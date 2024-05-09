@@ -2,14 +2,26 @@
 
 namespace Jegulnomic\Services\Integration\Telegram;
 
+use DI\Attribute\Inject;
 use Jegulnomic\Systems\Rest;
 
 class TelegramIntegration
 {
     private const string TELEGRAM_API_URL = 'https://api.telegram.org/bot%s/%s';
 
-    public function __construct(protected readonly string $token)
+    private string $token;
+
+    public function __construct(
+        #[Inject(Rest::class)]
+        private readonly Rest $rest
+    )
+    {}
+
+    public function setToken(string $token): self
     {
+        $this->token = $token;
+
+        return $this;
     }
 
     public function __call(string $name, array $arguments): array
@@ -22,7 +34,7 @@ class TelegramIntegration
             throw new \RuntimeException('First argument must be a payload array.');
         }
 
-        $result = Rest::post(
+        $result = $this->rest->post(
             sprintf(self::TELEGRAM_API_URL, $this->token, $name),
             $arguments[0]
         );

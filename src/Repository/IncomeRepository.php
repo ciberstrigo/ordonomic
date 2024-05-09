@@ -2,18 +2,26 @@
 
 namespace Jegulnomic\Repository;
 
+use DI\Attribute\Inject;
 use Jegulnomic\Entity\Income;
 use Jegulnomic\Systems\Database\DatabaseStorage;
+use Jegulnomic\Systems\StorageInterface;
 
 class IncomeRepository
 {
-    public static function filterNewIncomes(array $incomes): array
+    public function __construct(
+        #[Inject(DatabaseStorage::class)]
+        private readonly StorageInterface $storage
+    )
+    {}
+
+    public function filterNewIncomes(array $incomes): array
     {
         if (empty($incomes)) {
             return [];
         }
 
-        $pdo = DatabaseStorage::i()->getPDO();
+        $pdo = $this->storage->getPDO();
 
         $statement = $pdo->prepare(
             sprintf(
@@ -43,8 +51,8 @@ class IncomeRepository
         return $incomes;
     }
 
-    public static function getUnpayedIncome(): ?Income
+    public function getUnpayedIncome(): ?Income
     {
-        return DatabaseStorage::i()->getOne(Income::class, 'WHERE withdrawal_id is NULL');
+        return $this->storage->getOne(Income::class, 'WHERE withdrawal_id is NULL');
     }
 }
