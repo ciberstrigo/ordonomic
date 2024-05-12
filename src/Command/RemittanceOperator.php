@@ -47,4 +47,3 @@ readonly class RemittanceOperator extends AbstractCommand
             );
     }
 }
-

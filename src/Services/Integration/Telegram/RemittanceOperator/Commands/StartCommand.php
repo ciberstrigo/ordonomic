@@ -5,6 +5,9 @@ namespace Jegulnomic\Services\Integration\Telegram\RemittanceOperator\Commands;
 use Jegulnomic\Systems\Authenticator;
 use SergiX44\Nutgram\Handlers\Type\Command;
 use SergiX44\Nutgram\Nutgram;
+use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardButton;
+use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardMarkup;
+use SergiX44\Nutgram\Telegram\Types\WebApp\WebAppInfo;
 
 class StartCommand extends Command
 {
@@ -18,8 +21,16 @@ class StartCommand extends Command
         $operator = Authenticator::getRemittanceOperator($id);
 
         if (!$operator) {
-            $bot->sendMessage('Вас нет в списке операторов. Пройдите регистрацию. '
-                    . Authenticator::getRegistrationLink($id));
+            $bot->sendMessage(
+                'Вас нет в списке операторов. Пройдите регистрацию. ',
+                reply_markup: InlineKeyboardMarkup::make()
+                    ->addRow(
+                        InlineKeyboardButton::make(
+                            'Регистрация',
+                            web_app: WebAppInfo::make(Authenticator::getRegistrationLink($id))
+                        )
+                    )
+            );
             return;
         }
 
@@ -29,12 +40,18 @@ class StartCommand extends Command
         }
 
         if (!$operator->isAllowToProceed()) {
-            $bot->sendMessage('Пожалуйста, войдите в систему чтобы продолжать получать уведомления. '
-                    . Authenticator::getLoginLink($id)
+            $bot->sendMessage(
+                'Пожалуйста, войдите в систему чтобы продолжать получать уведомления. ',
+                reply_markup: InlineKeyboardMarkup::make()
+                    ->addRow(
+                        InlineKeyboardButton::make(
+                            'Вход',
+                            web_app: WebAppInfo::make(Authenticator::getLoginLink($id))
+                        )
+                    )
             );
             return;
         }
-
         Authenticator::updateSession($id);
 
         $bot->sendMessage('Вы находитесь в системе. Ваша сессия обновлена и действительна до: '

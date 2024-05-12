@@ -20,8 +20,7 @@ class BotProvider extends AbstractBotProvider
         private readonly StorageInterface $storage,
         #[Inject(WithdrawalOperations::class)]
         private readonly WithdrawalOperations $withdrawalOperations
-    )
-    {
+    ) {
     }
 
     #[Override]

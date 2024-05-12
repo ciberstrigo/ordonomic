@@ -10,8 +10,7 @@ readonly class TelegramBotCallback
     public function __construct(
         #[Inject(BotProvider::class)]
         private BotProvider $telegram
-    )
-    {
+    ) {
     }
 
     public function index(): void

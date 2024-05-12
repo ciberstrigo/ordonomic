@@ -1,8 +1,4 @@
-<?php
-
-use Jegulnomic\Systems\Template\Flash;
-
-?>
+<?php use Jegulnomic\Systems\Template\Flash; ?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -14,6 +10,7 @@ use Jegulnomic\Systems\Template\Flash;
     <link rel="stylesheet" type="text/css" href="/css/style.css?<?=uniqid()?>">
     <?= $this->stylesheets ?>
     <title><?= $this->title ?></title>
+    <?= $this->scripts ?>
 </head>
 <body>
 <div class="bg_cover">

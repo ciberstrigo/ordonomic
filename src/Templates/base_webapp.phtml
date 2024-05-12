@@ -1,0 +1,5 @@
+<?php $this->extend('src/Templates/base.phtml') ?>
+<?php $this->block('scripts') ?>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <?= $this->close ? '<script>window.Telegram.WebApp.close()</script>' : '' ?>
+<?php $this->endblock() ?>

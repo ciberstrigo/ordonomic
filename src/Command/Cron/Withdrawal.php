@@ -81,13 +81,16 @@ readonly class Withdrawal extends AbstractCommand
             $message,
             $operator->telegramUserId,
             reply_markup: InlineKeyboardMarkup::make()
-                ->addRow(InlineKeyboardButton::make(
-                    'Я оплатил!',
-                    callback_data: sprintf('%s:confirm', $income->withdrawal->id))
+                ->addRow(
+                    InlineKeyboardButton::make(
+                        'Я оплатил!',
+                        callback_data: sprintf('%s:confirm', $income->withdrawal->id)
+                    )
                 )
                 ->addRow(InlineKeyboardButton::make(
                     'Отмена',
-                    callback_data: sprintf('%s:cancel', $income->withdrawal->id)))
+                    callback_data: sprintf('%s:cancel', $income->withdrawal->id)
+                ))
         );
 
         try {
