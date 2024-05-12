@@ -2,20 +2,26 @@
 
 namespace Jegulnomic\Controller;
 
+use Jegulnomic\Systems\Command;
+
 class CommandEmulator
 {
     public function index()
     {
+        if ('DEV' !== $_ENV['APP_ENV']) {
+            return;
+        }
+
         $className = '\Jegulnomic\Command\\' . $_GET['class'];
         $methodName = $_GET['method'];
 
         if (!class_exists($className)) {
-            \Jegulnomic\Systems\Command::output('No such command class');
+            Command::output('No such command class');
             die;
         }
 
         if (!method_exists($className, $methodName)) {
-            \Jegulnomic\Systems\Command::output('No such command method');
+            Command::output('No such command method');
             die;
         }
 

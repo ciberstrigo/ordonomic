@@ -6,11 +6,13 @@ use DI\Attribute\Inject;
 use Jegulnomic\Command\AbstractCommand;
 use Jegulnomic\Repository\IncomeRepository;
 use Jegulnomic\Repository\RemittanceOperatorRepository;
-use Jegulnomic\Services\Integration\Telegram\TelegramIntegration;
+use Jegulnomic\Services\Integration\Telegram\RemittanceOperator\BotProvider;
 use Jegulnomic\Services\WithdrawalCreator;
 use Jegulnomic\Systems\Command;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
+use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardButton;
+use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardMarkup;
 
 readonly class Withdrawal extends AbstractCommand
 {
@@ -23,8 +25,8 @@ readonly class Withdrawal extends AbstractCommand
         private WithdrawalCreator $withdrawalCreator,
         #[Inject(RemittanceOperatorRepository::class)]
         private RemittanceOperatorRepository $operatorRepository,
-        #[Inject(TelegramIntegration::class)]
-        private TelegramIntegration $telegramIntegration,
+        #[Inject(BotProvider::class)]
+        private BotProvider $botProvider,
     ) {
     }
 
@@ -38,7 +40,7 @@ readonly class Withdrawal extends AbstractCommand
             return;
         }
 
-        $telegram = $this->telegramIntegration->setToken($_ENV['TELEGRAM_REMITTANCE_OPERATOR_BOT_TOKEN']);
+        $telegram = $this->botProvider->getBot();
         $operator = $this->operatorRepository->getOperator();
 
         if (!$operator) {
@@ -75,24 +77,18 @@ readonly class Withdrawal extends AbstractCommand
             $income->date->format('d F Y')
         ));
 
-        $tgResult = $telegram->sendMessage([
-            'chat_id' => $operator->telegramUserId,
-            'text' => $message,
-            'reply_markup' => json_encode([
-                'inline_keyboard' => [
-                    [
-                        [
-                            'text' => 'Я оплатил!',
-                            'callback_data' => sprintf('%s:confirm', $income->withdrawal->id)
-                        ],
-                        [
-                            'text' => 'Отмена',
-                            'callback_data' => sprintf('%s:cancel', $income->withdrawal->id)
-                        ],
-                    ]
-                ],
-            ]),
-        ]);
+        $tgResult = $telegram->sendMessage(
+            $message,
+            $operator->telegramUserId,
+            reply_markup: InlineKeyboardMarkup::make()
+                ->addRow(InlineKeyboardButton::make(
+                    'Я оплатил!',
+                    callback_data: sprintf('%s:confirm', $income->withdrawal->id))
+                )
+                ->addRow(InlineKeyboardButton::make(
+                    'Отмена',
+                    callback_data: sprintf('%s:cancel', $income->withdrawal->id)))
+        );
 
         try {
             $income->withdrawal->messageId = $tgResult['result']['message_id'];

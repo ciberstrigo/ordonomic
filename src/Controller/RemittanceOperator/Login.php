@@ -3,16 +3,16 @@
 namespace Jegulnomic\Controller\RemittanceOperator;
 
 use DI\Attribute\Inject;
-use Jegulnomic\Services\Integration\Telegram\TelegramIntegration;
 use Jegulnomic\Systems\Authenticator;
 use Jegulnomic\Systems\Template\Flash;
 use Jegulnomic\Systems\Template\Template;
+use SergiX44\Nutgram\Nutgram;
 
 readonly class Login
 {
     public function __construct(
-        #[Inject(TelegramIntegration::class)]
-        private TelegramIntegration $telegramIntegration
+        #[Inject(Nutgram::class)]
+        private Nutgram $telegram
     ) {
     }
 
@@ -40,12 +40,11 @@ readonly class Login
                 Flash::FLASH_SUCCESS
             );
 
-            $this->telegramIntegration
-                ->setToken($_ENV['TELEGRAM_REMITTANCE_OPERATOR_BOT_TOKEN'])
-                ->sendMessage([
-                    'chat_id' => $operator->telegramUserId,
-                    'text' => 'Вы вошли в систему.'
-                ]);
+            $this->telegram
+                ->sendMessage(
+                    'Вы вошли в систему.',
+                    $operator->telegramUserId
+                );
         }
 
         return (new Template())->render(

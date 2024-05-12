@@ -25,7 +25,8 @@
         "phpmailer/phpmailer": "^6.9",
         "ext-xml": "*",
         "ext-simplexml": "*",
-        "php-di/php-di": "^7.0"
+        "php-di/php-di": "^7.0",
+        "nutgram/nutgram": "^4.20"
     },
     "config": {
         "allow-plugins": {

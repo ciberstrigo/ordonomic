@@ -3,7 +3,7 @@
 namespace Jegulnomic\Controller\RemittanceOperator;
 
 use DI\Attribute\Inject;
-use Jegulnomic\Services\Integration\Telegram\TelegramIntegration;
+use Jegulnomic\Services\Integration\Telegram\RemittanceOperator\BotProvider;
 use Jegulnomic\Systems\Authenticator;
 use Jegulnomic\Systems\Template\Flash;
 use Jegulnomic\Systems\Template\Template;
@@ -11,8 +11,8 @@ use Jegulnomic\Systems\Template\Template;
 readonly class Registration
 {
     public function __construct(
-        #[Inject(TelegramIntegration::class)]
-        private TelegramIntegration $telegramIntegration
+        #[Inject(BotProvider::class)]
+        private BotProvider $botProvider
     ) {
     }
     public function index()
@@ -37,12 +37,11 @@ readonly class Registration
                 Flash::FLASH_SUCCESS
             );
 
-            $this->telegramIntegration
-                ->setToken($_ENV['TELEGRAM_REMITTANCE_OPERATOR_BOT_TOKEN'])
-                ->sendMessage([
-                    'chat_id' => $operator->telegramUserId,
-                    'text' => 'Регистрация завершена. Ожидайте подтверждения администратором.'
-                ]);
+            $this->botProvider->getBot()
+                ->sendMessage(
+                    'Регистрация завершена. Ожидайте подтверждения администратором.',
+                    $operator->telegramUserId
+                );
         }
 
         return (new Template())->render(

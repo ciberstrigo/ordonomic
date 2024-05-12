@@ -4,8 +4,8 @@ namespace Jegulnomic\Command\Telegram;
 
 use DI\Attribute\Inject;
 use Jegulnomic\Command\AbstractCommand;
-use Jegulnomic\Controller\Callback\TelegramBotRemittanceOperatorCallback;
-use Jegulnomic\Services\Integration\Telegram\TelegramIntegration;
+use Jegulnomic\Controller\RemittanceOperator\Callback\TelegramBotCallback;
+use Jegulnomic\Services\Integration\Telegram\RemittanceOperator\BotProvider;
 use Jegulnomic\Systems\Command;
 use Jegulnomic\Systems\PublicUrlProvider;
 
@@ -14,26 +14,26 @@ readonly class UpdateWebhook extends AbstractCommand
     public function __construct(
         #[Inject(PublicUrlProvider::class)]
         private PublicUrlProvider $publicUrlProvider,
-        #[Inject(TelegramIntegration::class)]
-        private TelegramIntegration $telegramIntegration
+        #[Inject(BotProvider::class)]
+        private BotProvider $botProvider
     ) {
     }
 
     public function forRemittanceOperator()
     {
         $url = $this->publicUrlProvider->getTelegramWebhookUrl(
-            TelegramBotRemittanceOperatorCallback::class
+            TelegramBotCallback::class
         );
 
         Command::output('Updating webhook to: ' . $url);
 
-        $response =
-            $this->telegramIntegration
-                ->setToken($_ENV['TELEGRAM_REMITTANCE_OPERATOR_BOT_TOKEN'])
-                ->setWebhook([
-                    'url' => $url
-                ]);
+        $isSet = $this->botProvider->getBot()->setWebhook($url);
 
-        Command::output($response['description']);
+        if ($isSet) {
+            Command::output('Webhook updated');
+            return;
+        }
+
+        Command::output('Webhook updating failure');
     }
 }

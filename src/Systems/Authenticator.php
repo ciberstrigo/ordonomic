@@ -40,7 +40,7 @@ class Authenticator
     public static function register(string $telegramUserId, string $password): RemittanceOperator
     {
         if (empty($password)) {
-            throw new RuntimeException('Password can not be empty');
+            throw new \RuntimeException('Password can not be empty');
         }
 
         $operator = self::getRemittanceOperator($telegramUserId);
@@ -60,7 +60,7 @@ class Authenticator
         $id = DatabaseStorage::i()->save($operator);
 
         if (!$id) {
-            throw new RuntimeException('Error occurred while trying to register new operator');
+            throw new \RuntimeException('Error occurred while trying to register new operator');
         }
 
         return $operator;

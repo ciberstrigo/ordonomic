@@ -4,7 +4,7 @@ namespace Jegulnomic\Command;
 
 use DI\Attribute\Inject;
 use Jegulnomic\Entity\RemittanceOperator as Operator;
-use Jegulnomic\Services\Integration\Telegram\TelegramIntegration;
+use Jegulnomic\Services\Integration\Telegram\RemittanceOperator\BotProvider;
 use Jegulnomic\Systems\Command;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
@@ -14,8 +14,8 @@ readonly class RemittanceOperator extends AbstractCommand
     public function __construct(
         #[Inject(DatabaseStorage::class)]
         private StorageInterface $storage,
-        #[Inject(TelegramIntegration::class)]
-        private TelegramIntegration $telegramIntegration
+        #[Inject(BotProvider::class)]
+        private BotProvider $botProvider
     ) {
     }
 
@@ -40,10 +40,11 @@ readonly class RemittanceOperator extends AbstractCommand
 
         Command::output(sprintf('Operator with id %s has been verified.', $id));
 
-        $this->telegramIntegration->setToken($_ENV['TELEGRAM_REMITTANCE_OPERATOR_BOT_TOKEN'])
-            ->sendMessage([
-                'chat_id' => $operator->telegramUserId,
-                'text' => 'Ваш аккаунт был подтверждён. Нажмите /start чтобы начать работу.'
-            ]);
+        $this->botProvider->getBot()
+            ->sendMessage(
+                'Ваш аккаунт был подтверждён. Нажмите /start чтобы начать работу.',
+                $operator->telegramUserId
+            );
     }
 }
+
