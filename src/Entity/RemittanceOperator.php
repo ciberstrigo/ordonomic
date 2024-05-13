@@ -4,9 +4,11 @@ namespace Jegulnomic\Entity;
 
 use Jegulnomic\Systems\Database\Attributes\Column;
 use Jegulnomic\Systems\Database\Attributes\Table;
+use Override;
+use Ramsey\Uuid\Uuid;
 
 #[Table(name: 'remittance_operator')]
-class RemittanceOperator
+class RemittanceOperator implements UserInterface
 {
     public function __construct(
         #[Column(name: 'id')]
@@ -22,8 +24,25 @@ class RemittanceOperator
     ) {
     }
 
-    public function isAllowToProceed()
+    public function isAllowToProceed(): bool
     {
         return $this->sessionUntil > time() && $this->isVerified;
+    }
+
+    #[Override]
+    public static function register(int $telegramId, int $sessionUntil, string $passwordHashed): UserInterface
+    {
+        return new RemittanceOperator(
+            Uuid::uuid4(),
+            $telegramId,
+            $sessionUntil,
+            $passwordHashed,
+            0
+        );
+    }
+
+    public function endSession(): void
+    {
+        $this->sessionUntil = 0;
     }
 }

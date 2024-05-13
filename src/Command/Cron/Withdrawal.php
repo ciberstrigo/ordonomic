@@ -94,9 +94,15 @@ readonly class Withdrawal extends AbstractCommand
         );
 
         try {
-            $income->withdrawal->messageId = $tgResult['result']['message_id'];
+            $income->withdrawal->messageId = $tgResult->message_id;
+
             $this->storage->save($income);
         } catch (\Throwable $e) {
+            $telegram->deleteMessage(
+                $income->withdrawal->sentTo->telegramUserId,
+                $income->withdrawal->messageId
+            );
+
             throw new \RuntimeException('Error while updating income information '.$e->getMessage());
         }
     }

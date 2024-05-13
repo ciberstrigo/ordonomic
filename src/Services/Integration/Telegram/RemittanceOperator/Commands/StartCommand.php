@@ -2,7 +2,9 @@
 
 namespace Jegulnomic\Services\Integration\Telegram\RemittanceOperator\Commands;
 
-use Jegulnomic\Systems\Authenticator;
+use DI\Attribute\Inject;
+use Jegulnomic\Services\Authenticator\RemittanceOperatorAuthenticator;
+use Jegulnomic\Systems\BaseAuthenticator;
 use SergiX44\Nutgram\Handlers\Type\Command;
 use SergiX44\Nutgram\Nutgram;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardButton;
@@ -15,10 +17,19 @@ class StartCommand extends Command
 
     protected ?string $description = 'Start using our application. Login or pass the registration though this command.';
 
+    protected BaseAuthenticator $authenticator;
+
+    public function setAuthenticator(BaseAuthenticator $authenticator): self
+    {
+        $this->authenticator = $authenticator;
+
+        return $this;
+    }
+
     public function handle(Nutgram $bot): void
     {
         $id = $bot->userId();
-        $operator = Authenticator::getRemittanceOperator($id);
+        $operator = $this->authenticator->getUser($id);
 
         if (!$operator) {
             $bot->sendMessage(
@@ -27,11 +38,12 @@ class StartCommand extends Command
                     ->addRow(
                         InlineKeyboardButton::make(
                             'Регистрация',
-                            web_app: WebAppInfo::make(Authenticator::getRegistrationLink($id))
+                            web_app: WebAppInfo::make($this->authenticator->getRegistrationLink($id))
                         )
                     )
             );
             return;
+
         }
 
         if (!$operator->isVerified) {
@@ -46,13 +58,13 @@ class StartCommand extends Command
                     ->addRow(
                         InlineKeyboardButton::make(
                             'Вход',
-                            web_app: WebAppInfo::make(Authenticator::getLoginLink($id))
+                            web_app: WebAppInfo::make($this->authenticator->getLoginLink($id))
                         )
                     )
             );
             return;
         }
-        Authenticator::updateSession($id);
+        $this->authenticator->updateSession($id);
 
         $bot->sendMessage('Вы находитесь в системе. Ваша сессия обновлена и действительна до: '
                 . date("d F Y H:i:s", $operator->sessionUntil));

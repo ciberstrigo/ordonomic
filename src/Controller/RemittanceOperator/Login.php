@@ -3,7 +3,10 @@
 namespace Jegulnomic\Controller\RemittanceOperator;
 
 use DI\Attribute\Inject;
-use Jegulnomic\Systems\Authenticator;
+use Jegulnomic\Services\Authenticator\RemittanceOperatorAuthenticator;
+use Jegulnomic\Services\Integration\Telegram\AbstractBotProvider;
+use Jegulnomic\Services\Integration\Telegram\RemittanceOperator\BotProvider;
+use Jegulnomic\Systems\BaseAuthenticator;
 use Jegulnomic\Systems\Template\Flash;
 use Jegulnomic\Systems\Template\Template;
 use SergiX44\Nutgram\Nutgram;
@@ -11,8 +14,10 @@ use SergiX44\Nutgram\Nutgram;
 readonly class Login
 {
     public function __construct(
-        #[Inject(Nutgram::class)]
-        private Nutgram $telegram
+        #[Inject(BotProvider::class)]
+        private AbstractBotProvider $botProvider,
+        #[Inject(RemittanceOperatorAuthenticator::class)]
+        private BaseAuthenticator $authenticator
     ) {
     }
 
@@ -36,7 +41,7 @@ readonly class Login
     private function loginUser(): bool
     {
         try {
-            $operator = Authenticator::authenticate($_POST['telegram-user-id'], $_POST['password']);
+            $operator = $this->authenticator->authenticate($_POST['telegram-user-id'], $_POST['password']);
         } catch (\Throwable $e) {
             Flash::createFlash(
                 'login',
@@ -53,7 +58,8 @@ readonly class Login
             Flash::FLASH_SUCCESS
         );
 
-        $this->telegram
+        $this->botProvider
+            ->getBot()
             ->sendMessage(
                 'Вы вошли в систему.',
                 $operator->telegramUserId

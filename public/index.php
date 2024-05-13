@@ -1,5 +1,8 @@
 <?php
 
+use Jegulnomic\Services\Integration\Telegram\Logger\BotProvider;
+use SergiX44\Nutgram\Telegram\Properties\ParseMode;
+
 const ENTRYPOINT_DIR = __DIR__;
 
 require_once ENTRYPOINT_DIR . '/../src/Systems/Function/bootstrap.php';
@@ -7,4 +10,21 @@ require_once ENTRYPOINT_DIR . '/../src/Systems/Function/bootstrap.php';
 $requestPath = explode('?', $_SERVER['REQUEST_URI']);
 parse_str($requestPath[1] ?? '', $parsed);
 
-(require_once SYSTEM_FUNC_DIR . '/controller_loader.php')($requestPath[0], $parsed);
+try {
+    (require_once SYSTEM_FUNC_DIR.'/controller_loader.php')($requestPath[0], $parsed);
+} catch (\Throwable $e) {
+    $bot = (new BotProvider())->getBot();
+    $bot
+        ->sendMessage(
+            "Alert!\n"
+            . $e->getMessage()
+            . "\n"
+            . $e->getFile()
+            . " on line "
+            . $e->getLine()
+            . "\n\n"
+            . "<code>" . $e->getTraceAsString() . "</code>",
+            $_ENV['TELEGRAM_LOGGER_BOT_SEND_TO_ID'],
+            parse_mode: ParseMode::HTML
+        );
+}

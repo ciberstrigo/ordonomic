@@ -25,8 +25,8 @@ readonly class PublicUrlProvider
         return $_ENV['PROD_BASE_URL'];
     }
 
-    public function getTelegramWebhookUrl(string $webhookController): string
+    public function getControllerUrl(string $controllerClass): string
     {
-        return self::getUrl() . $this->controllerManager->getUrlPath($webhookController);
+        return self::getUrl() . $this->controllerManager->getUrlPath($controllerClass);
     }
 }

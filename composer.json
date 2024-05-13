@@ -19,7 +19,6 @@
         "ext-bcmath": "*",
         "league/omnipay": "^3.2",
         "omnipay/paypal": "^3.0",
-        "paypal/rest-api-sdk-php": "^1.14",
         "ext-dom": "*",
         "ext-imap": "*",
         "phpmailer/phpmailer": "^6.9",

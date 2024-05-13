@@ -4,9 +4,12 @@ namespace Jegulnomic\Services\Integration\Telegram\RemittanceOperator;
 
 use DI\Attribute\Inject;
 use Jegulnomic\Entity\Withdrawal;
+use Jegulnomic\Services\Authenticator\RemittanceOperatorAuthenticator;
 use Jegulnomic\Services\Integration\Telegram\AbstractBotProvider;
+use Jegulnomic\Services\Integration\Telegram\RemittanceOperator\Commands\LogoutCommand;
 use Jegulnomic\Services\Integration\Telegram\RemittanceOperator\Commands\StartCommand;
 use Jegulnomic\Services\WithdrawalOperations;
+use Jegulnomic\Systems\BaseAuthenticator;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
 use Override;
@@ -19,7 +22,9 @@ class BotProvider extends AbstractBotProvider
         #[Inject(DatabaseStorage::class)]
         private readonly StorageInterface $storage,
         #[Inject(WithdrawalOperations::class)]
-        private readonly WithdrawalOperations $withdrawalOperations
+        private readonly WithdrawalOperations $withdrawalOperations,
+        #[Inject(RemittanceOperatorAuthenticator::class)]
+        private readonly BaseAuthenticator $authenticator
     ) {
     }
 
@@ -32,7 +37,8 @@ class BotProvider extends AbstractBotProvider
     #[Override]
     protected function setUpBehaviour(Nutgram $client): void
     {
-        $client->registerCommand(StartCommand::class);
+        $client->registerCommand((new StartCommand())->setAuthenticator($this->authenticator));
+        $client->registerCommand((new LogoutCommand())->setAuthenticator($this->authenticator));
         $client->onCallbackQueryData('{id}:{operation}', function (Nutgram $bot, $id, $operation) {
             $getResponse = function ($id, $operation): string {
                 try {
