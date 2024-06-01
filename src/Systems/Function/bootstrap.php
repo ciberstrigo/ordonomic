@@ -23,5 +23,3 @@ if ($_ENV['APP_ENV'] === 'prod') {
 } else {
     ContainerProvider::buildContainer();
 }
-
-

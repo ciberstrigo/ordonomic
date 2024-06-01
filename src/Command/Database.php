@@ -12,8 +12,8 @@ readonly class Database extends AbstractCommand
     public function __construct(
         #[Inject(DatabaseStorage::class)]
         private DatabaseStorage $storage
-    )
-    {}
+    ) {
+    }
 
     public function dumpScheme(): void
     {
