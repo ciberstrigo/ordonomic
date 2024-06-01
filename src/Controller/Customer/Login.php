@@ -1,52 +1,51 @@
 <?php
 
-namespace Jegulnomic\Controller\RemittanceOperator;
+namespace Jegulnomic\Controller\Customer;
 
 use DI\Attribute\Inject;
 use Jegulnomic\Services\Authenticator\RemittanceOperatorAuthenticator;
+use Jegulnomic\Services\Integration\Telegram\AbstractBotProvider;
 use Jegulnomic\Services\Integration\Telegram\RemittanceOperator\BotProvider;
 use Jegulnomic\Systems\BaseAuthenticator;
 use Jegulnomic\Systems\Template\Flash;
 use Jegulnomic\Systems\Template\Template;
+use SergiX44\Nutgram\Nutgram;
 
-readonly class Registration
+readonly class Login
 {
     public function __construct(
         #[Inject(BotProvider::class)]
-        private BotProvider $botProvider,
+        private AbstractBotProvider $botProvider,
         #[Inject(RemittanceOperatorAuthenticator::class)]
         private BaseAuthenticator $authenticator
     ) {
     }
+
     public function index()
     {
-        $isRegisterUserSuccess = false;
+        $isLoginSuccess = false;
 
         if ('POST' === $_SERVER['REQUEST_METHOD']) {
-            $isRegisterUserSuccess = $this->registerUser();
+            $isLoginSuccess = $this->loginUser();
         }
 
         return (new Template())->render(
-            'src/Templates/pages/RemittanceOperator/registration.phtml',
+            'src/Templates/pages/Customer/login.phtml',
             [
                 'telegram_user_id' => $_REQUEST['telegram_user_id'],
-                'close' => $isRegisterUserSuccess,
+                'close' => $isLoginSuccess,
             ]
         );
     }
 
-    private function registerUser(): bool
+    private function loginUser(): bool
     {
         try {
-            $operator = $this->authenticator
-                ->register(
-                    $_POST['telegram_user_id'],
-                    $_POST['password']
-                );
+            $operator = $this->authenticator->authenticate($_POST['telegram_user_id'], $_POST['password']);
         } catch (\Throwable $e) {
             Flash::createFlash(
-                'registration',
-                'Can not register new operator. Server error.',
+                'login',
+                $e->getMessage(),
                 Flash::FLASH_ERROR
             );
 
@@ -54,14 +53,15 @@ readonly class Registration
         }
 
         Flash::createFlash(
-            'registration',
+            'login',
             'Successful registered. Proceed back to telegram bot. You can close this page now.',
             Flash::FLASH_SUCCESS
         );
 
-        $this->botProvider->getBot()
+        $this->botProvider
+            ->getBot()
             ->sendMessage(
-                'Регистрация завершена. Ожидайте подтверждения администратором.',
+                'Вы вошли в систему.',
                 $operator->telegramUserId
             );
 

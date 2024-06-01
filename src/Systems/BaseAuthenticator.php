@@ -10,7 +10,7 @@ use Ramsey\Uuid\Uuid;
 
 abstract class BaseAuthenticator
 {
-    private const int SESSION_LIFE_TIME = 60 * 60; // 1 hour
+    private const SESSION_LIFE_TIME = 60 * 60; // 1 hour
 
     public function __construct(
         #[Inject(DatabaseStorage::class)]
@@ -59,7 +59,8 @@ abstract class BaseAuthenticator
             throw new \RuntimeException('Operator already exist!');
         }
 
-        $operator = call_user_func([$this->getUserClass(), 'register'],
+        $operator = call_user_func(
+            [$this->getUserClass(), 'register'],
             $telegramUserId,
             time() + self::SESSION_LIFE_TIME,
             password_hash($password, PASSWORD_BCRYPT)
@@ -113,18 +114,16 @@ abstract class BaseAuthenticator
         $this->storage->save($user);
     }
 
-    public function getRegistrationLink($telegramUserId): string
+    public function getRegistrationLink($payload): string
     {
         return $this->urlProvider->getControllerUrl($this->getRegistrationController())
-            . '?telegram_user_id='
-            . $telegramUserId;
+            . '?' . http_build_query($payload);
     }
 
-    public function getLoginLink($telegramUserId): string
+    public function getLoginLink($payload): string
     {
         return $this->urlProvider->getControllerUrl($this->getLoginController())
-            . '?telegram_user_id='
-            . $telegramUserId;
+            . '?' . http_build_query($payload);
     }
 
     abstract protected function getUserClass(): string;

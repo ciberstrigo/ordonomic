@@ -6,7 +6,7 @@ use Jegulnomic\Systems\Command;
 
 readonly class ProjectUtils extends AbstractCommand
 {
-    public function sizeMB()
+    public function sizeMB(): void
     {
         $currentBranch = exec('git rev-parse --abbrev-ref HEAD');
         exec('git ls-tree -r ' . $currentBranch . ' --name-only', $output);
@@ -20,6 +20,11 @@ readonly class ProjectUtils extends AbstractCommand
 
         $result += $this->folderSize(ENTRYPOINT_DIR . '/../vendor');
         Command::output('Total (MB)' . number_format($result / 1024 / 1024, 2));
+    }
+
+    public function env(): void
+    {
+        Command::output($_ENV['APP_ENV']);
     }
 
     private function folderSize($dir): int

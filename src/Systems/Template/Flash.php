@@ -4,12 +4,12 @@ namespace Jegulnomic\Systems\Template;
 
 class Flash
 {
-    public const string FLASH = 'FLASH_MESSAGES';
+    public const FLASH = 'FLASH_MESSAGES';
 
-    public const string FLASH_ERROR = 'error';
-    public const string FLASH_WARNING = 'warning';
-    public const string FLASH_INFO = 'info';
-    public const string FLASH_SUCCESS = 'success';
+    public const FLASH_ERROR = 'error';
+    public const FLASH_WARNING = 'warning';
+    public const FLASH_INFO = 'info';
+    public const FLASH_SUCCESS = 'success';
 
     public static function createFlash(string $name, string $message, string $type): void
     {

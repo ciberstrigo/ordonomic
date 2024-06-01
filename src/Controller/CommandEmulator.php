@@ -8,15 +8,15 @@ class CommandEmulator
 {
     public function index()
     {
-        if ('DEV' !== $_ENV['APP_ENV']) {
-            return;
-        }
+//        if ('DEV' !== $_ENV['APP_ENV']) {
+//            return;
+//        }
 
         $className = '\Jegulnomic\Command\\' . $_GET['class'];
         $methodName = $_GET['method'];
 
         if (!class_exists($className)) {
-            Command::output('No such command class');
+            Command::output('No such command class ' . $className);
             die;
         }
 
@@ -25,6 +25,12 @@ class CommandEmulator
             die;
         }
 
-        (new $className($_GET['parameters'] ?? []))->$methodName();
+        try {
+            (new $className($_GET['parameters'] ?? []))->$methodName();
+        } catch(\Throwable $e) {
+            echo 'AN Error has been occured ' . PHP_EOL;
+            echo $e;
+        }
+
     }
 }

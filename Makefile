@@ -37,4 +37,7 @@ get_incomes:
 notify_operator:
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) sh -c 'bin/console Cron\\Withdrawal createAndNotifyOperator'
 
+approve_operator:
+	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) sh -c 'bin/console RemittanceOperator approve $(ID)'
+
 .PHONY: help start stop fix shell operator__webhook_update

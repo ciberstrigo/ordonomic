@@ -7,14 +7,8 @@ use Jegulnomic\Entity\Income;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
 
-readonly class IncomeRepository
+readonly class IncomeRepository extends AbstractRepository
 {
-    public function __construct(
-        #[Inject(DatabaseStorage::class)]
-        private StorageInterface $storage
-    ) {
-    }
-
     public function filterNewIncomes(array $incomes): array
     {
         if (empty($incomes)) {
@@ -33,7 +27,12 @@ readonly class IncomeRepository
             )
         );
 
-        foreach (array_map(fn ($income) => $income->transactionId, $incomes) as $key => $id) {
+        foreach (
+            array_map(
+                fn ($income) => $income->transactionId,
+                $incomes
+            ) as $key => $id
+        ) {
             $statement->bindValue(($key + 1), $id);
         }
 

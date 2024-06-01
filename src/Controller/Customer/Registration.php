@@ -1,6 +1,6 @@
 <?php
 
-namespace Jegulnomic\Controller\RemittanceOperator;
+namespace Jegulnomic\Controller\Customer;
 
 use DI\Attribute\Inject;
 use Jegulnomic\Services\Authenticator\RemittanceOperatorAuthenticator;
@@ -27,9 +27,9 @@ readonly class Registration
         }
 
         return (new Template())->render(
-            'src/Templates/pages/RemittanceOperator/registration.phtml',
+            'src/Templates/pages/Customer/registration.phtml',
             [
-                'telegram_user_id' => $_REQUEST['telegram_user_id'],
+                'telegram_user_id' => $_GET['telegram_user_id'] ?? $_POST['telegram-user-id'],
                 'close' => $isRegisterUserSuccess,
             ]
         );
@@ -38,15 +38,14 @@ readonly class Registration
     private function registerUser(): bool
     {
         try {
-            $operator = $this->authenticator
-                ->register(
-                    $_POST['telegram_user_id'],
-                    $_POST['password']
-                );
+            $operator = $this->authenticator->register($_POST['telegram-user-id'], $_POST['password']);
+            if (null === $operator) {
+                throw new \RuntimeException('Can not register new operator. Server error.');
+            }
         } catch (\Throwable $e) {
             Flash::createFlash(
                 'registration',
-                'Can not register new operator. Server error.',
+                $e->getMessage(),
                 Flash::FLASH_ERROR
             );
 

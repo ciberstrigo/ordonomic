@@ -38,7 +38,7 @@ class StartCommand extends Command
                     ->addRow(
                         InlineKeyboardButton::make(
                             'Регистрация',
-                            web_app: WebAppInfo::make($this->authenticator->getRegistrationLink($id))
+                            web_app: WebAppInfo::make($this->authenticator->getRegistrationLink(['telegram_user_id' => $id]))
                         )
                     )
             );
@@ -58,7 +58,11 @@ class StartCommand extends Command
                     ->addRow(
                         InlineKeyboardButton::make(
                             'Вход',
-                            web_app: WebAppInfo::make($this->authenticator->getLoginLink($id))
+                            web_app: WebAppInfo::make(
+                                $this->authenticator->getLoginLink([
+                                    'telegram_user_id' => $id,
+                                ])
+                            )
                         )
                     )
             );

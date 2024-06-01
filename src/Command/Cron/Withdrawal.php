@@ -48,11 +48,11 @@ readonly class Withdrawal extends AbstractCommand
             return;
         }
 
-        try {
-            $income->withdrawal = $this->withdrawalCreator->create($income);
-        } catch (\Throwable $e) {
-            throw new \RuntimeException('Error while creating withdrawal '.$e->getMessage());
-        }
+        //        try {
+        $income->withdrawal = $this->withdrawalCreator->create($income);
+        //        } catch (\Throwable $e) {
+        //            throw new \RuntimeException('Error while creating withdrawal '.$e->getMessage());
+        //        }
 
         $income->withdrawal->sentTo = $operator;
 

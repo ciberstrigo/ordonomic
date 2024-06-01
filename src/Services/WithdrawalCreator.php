@@ -16,7 +16,7 @@ use Ramsey\Uuid\Uuid;
 
 readonly class WithdrawalCreator
 {
-    public const int CALCULATION_ACCURACY = 4;
+    public const CALCULATION_ACCURACY = 4;
 
     public function __construct(
         #[Inject(DatabaseStorage::class)]

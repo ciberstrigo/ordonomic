@@ -30,9 +30,9 @@ readonly class Login
         }
 
         return (new Template())->render(
-            'src/Templates/pages/login.phtml',
+            'src/Templates/pages/RemittanceOperator/login.phtml',
             [
-                'telegram_user_id' => $_GET['telegram_user_id'] ?? $_POST['telegram-user-id'],
+                'telegram_user_id' => $_REQUEST['telegram_user_id'],
                 'close' => $isLoginSuccess,
             ]
         );
@@ -41,7 +41,7 @@ readonly class Login
     private function loginUser(): bool
     {
         try {
-            $operator = $this->authenticator->authenticate($_POST['telegram-user-id'], $_POST['password']);
+            $operator = $this->authenticator->authenticate($_POST['telegram_user_id'], $_POST['password']);
         } catch (\Throwable $e) {
             Flash::createFlash(
                 'login',

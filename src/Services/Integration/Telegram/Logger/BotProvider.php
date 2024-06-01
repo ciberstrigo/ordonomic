@@ -8,7 +8,6 @@ use SergiX44\Nutgram\Nutgram;
 
 class BotProvider extends AbstractBotProvider
 {
-
     #[Override]
     protected function getToken(): string
     {

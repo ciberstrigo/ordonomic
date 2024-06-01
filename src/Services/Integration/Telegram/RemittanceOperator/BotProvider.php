@@ -57,7 +57,7 @@ class BotProvider extends AbstractBotProvider
                     }
 
                     return $this->withdrawalOperations->$operation($withdrawal);
-                } catch (\Throwable $exception) {
+                } catch (\Throwable) {
                     return 'Ошибка в системе.';
                 }
             };

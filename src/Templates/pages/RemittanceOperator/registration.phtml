@@ -1,0 +1,31 @@
+<?php use Jegulnomic\Systems\Template\Flash;?>
+
+<?php $this->extend('src/Templates/base_webapp.phtml') ?>
+<?php $this->block('modal') ?>
+    <form class="main-form first" action="/remittance-operator/registration" method="post">
+        <div class="main-form__title">
+            <h1> Register</h1>
+            <h2>Регистрация в системе</h2>
+        </div>
+
+        <?=Flash::flash('registration') ?>
+
+        <div class="main-form__body">
+            <input class="main-form__body--input"
+                   name="telegram_user_id"
+                   type="text"
+                   placeholder="Username"
+                   readonly="readonly"
+                   value="<?= $_REQUEST['telegram_user_id'] ?>" /> &#x9;
+            <input class="main-form__body--input"
+                   name="password"
+                   type="password"
+                   placeholder="Password" />&#x9;
+            <input class="main-form__body--input"
+                   name="password_repeat"
+                   type="password"
+                   placeholder="Password" />&#x9;
+            <button class="btn full_btn" name="submit-login">Register</button>
+        </div>
+    </form>
+<?php $this->endblock() ?>
