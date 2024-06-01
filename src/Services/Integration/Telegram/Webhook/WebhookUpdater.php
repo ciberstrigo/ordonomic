@@ -3,7 +3,6 @@
 namespace Jegulnomic\Services\Integration\Telegram\Webhook;
 
 use DI\Attribute\Inject;
-use http\Exception\RuntimeException;
 use Jegulnomic\Controller\Logger\Callback\TelegramBotCallback as LoggerCallback;
 use Jegulnomic\Controller\RemittanceOperator\Callback\TelegramBotCallback as OperatorCallback;
 use Jegulnomic\Services\Integration\Telegram\AbstractBotProvider;
@@ -50,7 +49,7 @@ readonly class WebhookUpdater
         $isSet = $botProvider->getBot()->setWebhook($url);
 
         if (!$isSet) {
-            throw new RuntimeException('Webhook was not set.');
+            throw new \RuntimeException('Webhook was not set.');
         }
     }
 }
