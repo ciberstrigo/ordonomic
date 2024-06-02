@@ -15,4 +15,3 @@ $environment = file_exists(ENTRYPOINT_DIR . '/../do_not_deploy_me_on_prod') ? 'l
 // Container builder
 
 ContainerProvider::buildContainer();
-

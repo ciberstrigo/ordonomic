@@ -14,8 +14,8 @@ readonly class IncomesGetter
         private PayPalMailIntegration $payPalMailIntegration,
         #[Inject(IncomeRepository::class)]
         private IncomeRepository $incomeRepository,
-    )
-    {}
+    ) {
+    }
 
     public function get(): void
     {

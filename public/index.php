@@ -18,15 +18,19 @@ try {
 
     try {
         $bot
-            ->sendMessage(mb_strimwidth(
-                "Alert!\n"
-                . $e->getMessage()
-                . "\n"
-                . $e->getFile()
-                . " on line "
-                . $e->getLine()
-                . "\n\n"
-                . "<code>" . $e->getTraceAsString() . "</code>", 0, 1024),
+            ->sendMessage(
+                mb_strimwidth(
+                    "Alert!\n"
+                    . $e->getMessage()
+                    . "\n"
+                    . $e->getFile()
+                    . " on line "
+                    . $e->getLine()
+                    . "\n\n"
+                    . "<code>" . $e->getTraceAsString() . "</code>",
+                    0,
+                    1024
+                ),
                 $_ENV['TELEGRAM_LOGGER_BOT_SEND_TO_ID'],
                 parse_mode: ParseMode::HTML
             );

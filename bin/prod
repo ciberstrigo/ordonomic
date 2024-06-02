@@ -1,4 +1,5 @@
-#!/usr/bin/env php
+#!/opt/php82/bin/php
+
 <?php
 
 use Jegulnomic\Command\AbstractCommand;

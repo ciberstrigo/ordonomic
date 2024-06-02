@@ -2,6 +2,8 @@
 
 namespace Jegulnomic\Controller;
 
+use Jegulnomic\Systems\Template\Template;
+
 class PhpInfo
 {
     public function index(): void
@@ -12,5 +14,12 @@ class PhpInfo
     public function throw(): void
     {
         throw new \Exception('test exception');
+    }
+
+    public function shell()
+    {
+        return (new Template())->render(
+            'src/Templates/admin/shell.phtml',
+        );
     }
 }
