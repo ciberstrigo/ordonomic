@@ -7,7 +7,7 @@ use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
 use PDO;
 
-readonly class Database extends AbstractCommand
+class Database extends AbstractCommand
 {
     public function __construct(
         #[Inject(DatabaseStorage::class)]

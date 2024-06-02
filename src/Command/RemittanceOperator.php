@@ -9,7 +9,7 @@ use Jegulnomic\Systems\Command;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
 
-readonly class RemittanceOperator extends AbstractCommand
+class RemittanceOperator extends AbstractCommand
 {
     public function __construct(
         #[Inject(DatabaseStorage::class)]

@@ -4,7 +4,7 @@ namespace Jegulnomic\Command;
 
 use Jegulnomic\Systems\Command;
 
-readonly class ProjectUtils extends AbstractCommand
+class ProjectUtils extends AbstractCommand
 {
     public function sizeMB(): void
     {

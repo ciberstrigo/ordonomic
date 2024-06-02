@@ -13,7 +13,7 @@ use Jegulnomic\Services\Integration\Telegram\Webhook\WebhookUpdater;
 use Jegulnomic\Systems\Command;
 use Jegulnomic\Systems\PublicUrlProvider;
 
-readonly class UpdateWebhook extends AbstractCommand
+class UpdateWebhook extends AbstractCommand
 {
     public function __construct(
         #[Inject(WebhookUpdater::class)]

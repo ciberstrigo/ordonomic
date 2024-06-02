@@ -18,8 +18,6 @@ class PhpInfo
 
     public function shell()
     {
-        return (new Template())->render(
-            'src/Templates/admin/shell.phtml',
-        );
+        return 'disabled';
     }
 }

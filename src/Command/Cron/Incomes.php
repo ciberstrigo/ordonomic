@@ -11,7 +11,7 @@ use Jegulnomic\Services\Integration\PayPal\PayPalMailIntegration;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
 
-readonly class Incomes extends AbstractCommand
+class Incomes extends AbstractCommand
 {
     public function __construct(
         #[Inject(IncomesGetter::class)]

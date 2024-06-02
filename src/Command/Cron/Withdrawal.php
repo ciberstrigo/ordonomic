@@ -14,7 +14,7 @@ use Jegulnomic\Systems\StorageInterface;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardButton;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardMarkup;
 
-readonly class Withdrawal extends AbstractCommand
+class Withdrawal extends AbstractCommand
 {
     public function __construct(
         #[Inject(DatabaseStorage::class)]
