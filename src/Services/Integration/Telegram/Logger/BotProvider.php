@@ -20,5 +20,26 @@ class BotProvider extends AbstractBotProvider
         $client->onCommand('start', function (Nutgram $bot) {
             $bot->sendMessage(sprintf('Hello %s', $bot->message()->from->username));
         });
+
+//        $client->onCommand('phpinfo', function (Nutgram $bot) {
+//            $message = sprintf('
+//                PHP version: %s
+//
+//                Extensions: %s
+//            ',
+//                phpversion(),
+//                implode(', ', get_loaded_extensions()),
+//            );
+//
+//            $bot->sendMessage($message);
+//        });
+//
+//        $client->onCommand('imap', function (Nutgram $bot) {
+//            try {
+//                $bot->sendMessage(implode(',', get_extension_funcs('imap')));
+//            } catch (\Throwable $exception) {
+//                $bot->sendMessage($exception->getMessage());
+//            }
+//        });
     }
 }

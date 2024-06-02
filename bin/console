@@ -24,8 +24,6 @@ if (!method_exists($className, $methodName)) {
 $container = \Jegulnomic\Systems\ContainerProvider::getContainer();
 /** @var AbstractCommand $instance */
 $instance = $container->get($className);
-$className = '\Jegulnomic\Command\\' . $argv[1];
-$methodName = $argv[2];
 
 if (!class_exists($className)) {
     Command::output('No such command class: ' . $className);
@@ -40,5 +38,4 @@ if (!method_exists($className, $methodName)) {
 $container = \Jegulnomic\Systems\ContainerProvider::getContainer();
 /** @var AbstractCommand $instance */
 $instance = $container->get($className);
-$instance->setArguments(array_slice($argv, 3))->$methodName();
 $instance->setArguments(array_slice($argv, 3))->$methodName();

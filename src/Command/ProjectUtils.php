@@ -27,6 +27,25 @@ class ProjectUtils extends AbstractCommand
         Command::output($_ENV['APP_ENV']);
     }
 
+    public function phpinfo()
+    {
+        $message = sprintf('
+            PHP version: %s
+        
+            Extensions: %s
+        ',
+            phpversion(),
+            implode(', ', get_loaded_extensions()),
+        );
+
+        Command::output($message);
+    }
+
+    public function imap()
+    {
+        Command::output(implode(',', get_extension_funcs('imap')));
+    }
+
     private function folderSize($dir): int
     {
         $size = 0;

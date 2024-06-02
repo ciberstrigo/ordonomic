@@ -11,9 +11,13 @@ class Alive extends AbstractCommand
     {
         $bot = (new BotProvider())->getBot();
 
+        $s = 'Hey man look i' . PHP_EOL;
+        $s .= 'I\'m alive!';
+
+
         $bot
             ->sendMessage(
-                'I\'m alive! ' . phpversion(),
+                $s,
                 $_ENV['TELEGRAM_LOGGER_BOT_SEND_TO_ID'],
                 parse_mode: ParseMode::HTML
             );
