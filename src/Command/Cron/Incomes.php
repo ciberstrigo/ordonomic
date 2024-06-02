@@ -6,6 +6,7 @@ use DI\Attribute\Inject;
 use Jegulnomic\Command\AbstractCommand;
 use Jegulnomic\Entity\Income;
 use Jegulnomic\Repository\IncomeRepository;
+use Jegulnomic\Services\BusinessProcess\IncomesGetter;
 use Jegulnomic\Services\Integration\PayPal\PayPalMailIntegration;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
@@ -13,24 +14,13 @@ use Jegulnomic\Systems\StorageInterface;
 readonly class Incomes extends AbstractCommand
 {
     public function __construct(
-        #[Inject(PayPalMailIntegration::class)]
-        private PayPalMailIntegration $payPalMailIntegration,
-        #[Inject(IncomeRepository::class)]
-        private IncomeRepository $incomeRepository,
+        #[Inject(IncomesGetter::class)]
+        private IncomesGetter $incomesGetter
     ) {
     }
 
     public function proceed()
     {
-        $incomes = $this->payPalMailIntegration->connect()->getAllIncomes();
-
-        $incomes = array_map(
-            fn ($transaction) => Income::createFromPayPalTransaction($transaction),
-            $incomes
-        );
-
-        $newIncomes = $this->incomeRepository->filterNewIncomes($incomes);
-
-        $this->incomeRepository->save($newIncomes);
+        $this->incomesGetter->get();
     }
 }

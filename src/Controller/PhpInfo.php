@@ -8,4 +8,9 @@ class PhpInfo
     {
         phpinfo();
     }
+
+    public function throw(): void
+    {
+        throw new \Exception('test exception');
+    }
 }

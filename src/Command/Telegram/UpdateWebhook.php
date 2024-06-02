@@ -9,54 +9,40 @@ use Jegulnomic\Controller\Logger\Callback\TelegramBotCallback as LoggerCallback;
 use Jegulnomic\Services\Integration\Telegram\AbstractBotProvider;
 use Jegulnomic\Services\Integration\Telegram\RemittanceOperator\BotProvider as OperatorBotProvider;
 use Jegulnomic\Services\Integration\Telegram\Logger\BotProvider as LoggerBotProvider;
+use Jegulnomic\Services\Integration\Telegram\Webhook\WebhookUpdater;
 use Jegulnomic\Systems\Command;
 use Jegulnomic\Systems\PublicUrlProvider;
 
 readonly class UpdateWebhook extends AbstractCommand
 {
     public function __construct(
-        #[Inject(PublicUrlProvider::class)]
-        private PublicUrlProvider $publicUrlProvider,
-        #[Inject(OperatorBotProvider::class)]
-        private AbstractBotProvider $operatorBotProvider,
-        #[Inject(LoggerBotProvider::class)]
-        private AbstractBotProvider $loggerBotProvider,
+        #[Inject(WebhookUpdater::class)]
+        private WebhookUpdater $webhookUpdater,
     ) {
     }
 
     public function forRemittanceOperator(): void
     {
-        $this->update(
-            $this->operatorBotProvider,
-            OperatorCallback::class
-        );
+        Command::output('Updating webhook to Remittance Operator');
+
+        try {
+            $this->webhookUpdater->forRemittanceOperator();
+        } catch (\Throwable) {
+            Command::output('Webhook was not set. Error occurred.');
+        }
+        Command::output('Webhook updated');
     }
 
     public function forLogger(): void
     {
-        $this->update(
-            $this->loggerBotProvider,
-            LoggerCallback::class
-        );
-    }
+        Command::output('Updating webhook to Logger');
 
-    private function update(
-        AbstractBotProvider $botProvider,
-        string $callbackClass
-    ): void {
-        $url = $this->publicUrlProvider->getControllerUrl(
-            $callbackClass
-        );
-
-        Command::output('Updating webhook to: ' . $url);
-
-        $isSet = $botProvider->getBot()->setWebhook($url);
-
-        if ($isSet) {
-            Command::output('Webhook updated');
-            return;
+        try {
+            $this->webhookUpdater->forLogger();
+        } catch (\Throwable) {
+            Command::output('Webhook was not set. Error occurred.');
         }
 
-        Command::output('Webhook updating failure');
+        Command::output('Webhook updated');
     }
 }

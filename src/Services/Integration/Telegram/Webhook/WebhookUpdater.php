@@ -49,7 +49,7 @@ readonly class WebhookUpdater
         $isSet = $botProvider->getBot()->setWebhook($url);
 
         if (!$isSet) {
-            throw new \RuntimeException('Webhook was not set.');
+            throw new \RuntimeException('Webhook updating failed. ' . $url);
         }
     }
 }

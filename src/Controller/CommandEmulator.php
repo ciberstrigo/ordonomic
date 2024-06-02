@@ -8,10 +8,6 @@ class CommandEmulator
 {
     public function index()
     {
-        if ('DEV' !== $_ENV['APP_ENV']) {
-            return;
-        }
-
         $className = '\Jegulnomic\Command\\' . $_GET['class'];
         $methodName = $_GET['method'];
 

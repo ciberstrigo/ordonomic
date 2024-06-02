@@ -14,12 +14,5 @@ $environment = file_exists(ENTRYPOINT_DIR . '/../do_not_deploy_me_on_prod') ? 'l
 
 // Container builder
 
-if ($_ENV['APP_ENV'] === 'prod') {
-    $builder = new \DI\ContainerBuilder();
-    $builder->enableCompilation(PROJECT_DIR . '/var/tmp');
-    $builder->writeProxiesToFile(true, PROJECT_DIR . '/var/tmp/proxies');
+ContainerProvider::buildContainer();
 
-    $container = $builder->build();
-} else {
-    ContainerProvider::buildContainer();
-}

@@ -13,10 +13,10 @@ class ContainerProvider
     {
         $builder = new \DI\ContainerBuilder();
 
-        if ('PROD' === $_ENV['APP_ENV']) {
-            $builder->enableCompilation(VAR_DIR . '/tmp');
-            $builder->writeProxiesToFile(true, VAR_DIR . '/tmp/proxies');
-        }
+//        if ('prod' === $_ENV['APP_ENV']) {
+//            $builder->enableCompilation(PROJECT_DIR . '/var/tmp');
+//            $builder->writeProxiesToFile(true, PROJECT_DIR . '/var/tmp/proxies');
+//        }
 
         $builder->useAutowiring(false);
         $builder->useAttributes(true);

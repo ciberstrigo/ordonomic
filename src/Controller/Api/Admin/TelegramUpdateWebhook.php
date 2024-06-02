@@ -3,13 +3,7 @@
 namespace Jegulnomic\Controller\Api\Admin;
 
 use DI\Attribute\Inject;
-use Jegulnomic\Controller\Logger\Callback\TelegramBotCallback as LoggerCallback;
-use Jegulnomic\Controller\RemittanceOperator\Callback\TelegramBotCallback as OperatorCallback;
-use Jegulnomic\Services\Integration\Telegram\AbstractBotProvider;
-use Jegulnomic\Services\Integration\Telegram\Logger\BotProvider as LoggerBotProvider;
-use Jegulnomic\Services\Integration\Telegram\RemittanceOperator\BotProvider as OperatorBotProvider;
 use Jegulnomic\Services\Integration\Telegram\Webhook\WebhookUpdater;
-use Jegulnomic\Systems\PublicUrlProvider;
 
 readonly class TelegramUpdateWebhook
 {
@@ -24,10 +18,10 @@ readonly class TelegramUpdateWebhook
     {
         try {
             $this->webhookUpdater->forRemittanceOperator();
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
             echo json_encode([
                 'status' => 'fail',
-                'message' => 'webhook updating failed'
+                'message' => $e->getMessage(),
             ]);
             return;
         }
@@ -42,10 +36,10 @@ readonly class TelegramUpdateWebhook
     {
         try {
             $this->webhookUpdater->forLogger();
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
             echo json_encode([
                 'status' => 'fail',
-                'message' => 'webhook updating failed'
+                'message' => $e->getMessage()
             ]);
             return;
         }

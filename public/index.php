@@ -18,7 +18,7 @@ try {
 
     try {
         $bot
-            ->sendMessage(
+            ->sendMessage(mb_strimwidth(
                 "Alert!\n"
                 . $e->getMessage()
                 . "\n"
@@ -26,14 +26,20 @@ try {
                 . " on line "
                 . $e->getLine()
                 . "\n\n"
-                . "<code>" . $e->getTraceAsString() . "</code>",
+                . "<code>" . $e->getTraceAsString() . "</code>", 0, 1024),
                 $_ENV['TELEGRAM_LOGGER_BOT_SEND_TO_ID'],
                 parse_mode: ParseMode::HTML
             );
     } catch (Throwable $exception) {
-        echo $e->getMessage() . PHP_EOL;
-        echo $e->getFile() . PHP_EOL;
-        echo $e->getLine() . PHP_EOL;
+        echo 'Unsent to bot exception: <br>';
+        echo $e->getMessage() . '<br>';
+        echo $e->getFile() . '<br>';
+        echo $e->getLine() . '<br>';
+        echo '<br>';
+        echo 'Reason of fail telegram notification <br>';
+        echo $exception->getMessage() . '<br>';
+        echo $exception->getFile() . '<br>';
+        echo $exception->getLine() . '<br>';
     }
 
 }

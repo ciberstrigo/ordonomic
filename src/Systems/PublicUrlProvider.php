@@ -13,20 +13,24 @@ readonly class PublicUrlProvider
     ) {
     }
 
-    public function getUrl()
+    public function getUrl(): string
     {
-        if ('DEV' === strtoupper($_ENV['APP_ENV'])) {
+        if ('local' === strtolower($_ENV['APP_ENV'])) {
             $result = Rest::get('http://ngrok:4040/api/tunnels');
             $data = json_decode($result, true);
 
             return $data['tunnels'][0]['public_url'];
         }
 
-        return $_ENV['PROD_BASE_URL'];
+        if ('prod' === strtolower($_ENV['APP_ENV'])) {
+            return $_ENV['PROD_BASE_URL'];
+        }
+
+        return '';
     }
 
     public function getControllerUrl(string $controllerClass): string
     {
-        return self::getUrl() . $this->controllerManager->getUrlPath($controllerClass);
+        return $this->getUrl() . $this->controllerManager->getUrlPath($controllerClass);
     }
 }
