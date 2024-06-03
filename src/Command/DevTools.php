@@ -4,7 +4,7 @@ namespace Jegulnomic\Command;
 
 use Jegulnomic\Systems\Command;
 
-class ProjectUtils extends AbstractCommand
+class DevTools extends AbstractCommand
 {
     public function sizeMB(): void
     {
@@ -39,11 +39,6 @@ class ProjectUtils extends AbstractCommand
         );
 
         Command::output($message);
-    }
-
-    public function imap()
-    {
-        Command::output(implode(',', get_extension_funcs('imap')));
     }
 
     private function folderSize($dir): int

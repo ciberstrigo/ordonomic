@@ -2,8 +2,6 @@
 
 namespace Jegulnomic\Command;
 
-use Jegulnomic\Systems\StorageInterface;
-
 class AbstractCommand
 {
     private array $arguments;

@@ -23,19 +23,31 @@ return static function (string $path, array $parameters): void {
     $methodName = lcfirst(ltrim($matches[0], '\\'));
 
     if (!method_exists($classPath, $methodName)) {
-        $alternativeClassName = $classPath . '\\' . ucfirst($methodName);
-        if (method_exists($alternativeClassName, 'index')) {
-            echo ContainerProvider::getContainer()
-                ->get($alternativeClassName)
-                ->index();
-            return;
+        $classPath = $classPath . '\\' . ucfirst($methodName);
+        $methodName = 'index';
+    }
+
+    if (method_exists($classPath, $methodName)) {
+        $attributes = (new ReflectionClass($classPath))->getAttributes();
+
+        foreach ($attributes as $attribute) {
+            $attribute->newInstance();
         }
 
-        http_response_code(404);
-        echo('not found' . PHP_EOL);
+        $attributes = (new ReflectionMethod($classPath, $methodName))->getAttributes();
+
+        foreach ($attributes as $attribute) {
+            $attribute->newInstance();
+        }
+
+        echo ContainerProvider::getContainer()
+            ->get($classPath)
+            ->$methodName();
         return;
     }
 
-    echo ContainerProvider::getContainer()
-        ->get($classPath)->$methodName();
+    http_response_code(404);
+    echo('not found' . PHP_EOL);
 };
+
+

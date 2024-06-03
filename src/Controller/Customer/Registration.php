@@ -18,6 +18,7 @@ readonly class Registration
         private BaseAuthenticator $authenticator
     ) {
     }
+
     public function index()
     {
         $isRegisterUserSuccess = false;

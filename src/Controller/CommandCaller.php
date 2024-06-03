@@ -4,16 +4,18 @@ namespace Jegulnomic\Controller;
 
 use Jegulnomic\Command\AbstractCommand;
 use Jegulnomic\Systems\Command;
+use Jegulnomic\Systems\Controller\Attributes\Signature;
 use Psr\Container\ContainerInterface;
 
-class CommandEmulator
+#[Signature(secret: 'COMMAND_EMULATOR_SECRET')]
+class CommandCaller
 {
     public function __construct(
-        private ContainerInterface $container
+        private readonly ContainerInterface $container,
     ) {
     }
 
-    public function index()
+    public function index(): void
     {
         $className = '\Jegulnomic\Command\\' . $_GET['class'];
         $methodName = $_GET['method'];
@@ -28,15 +30,9 @@ class CommandEmulator
             die;
         }
 
-        try {
-            /** @var AbstractCommand $class */
-            $class = $this->container->get($className);
-            $class->setArguments($_GET['parameters'] ?? []);
-            $class->$methodName();
-        } catch(\Throwable $e) {
-            echo 'AN Error has been occured ' . PHP_EOL;
-            echo $e;
-        }
-
+        /** @var AbstractCommand $class */
+        $class = $this->container->get($className);
+        $class->setArguments($_GET['parameters'] ?? []);
+        $class->$methodName();
     }
 }

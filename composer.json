@@ -26,7 +26,8 @@
         "php-di/php-di": "^7.0",
         "nutgram/nutgram": "^4.20",
         "ddeboer/imap": "^1.19",
-        "zmog/pquery": "^1.0"
+        "zmog/pquery": "^1.0",
+        "timjmasters/php-jws": "^0.5.0"
     },
     "config": {
         "allow-plugins": {

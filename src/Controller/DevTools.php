@@ -2,11 +2,12 @@
 
 namespace Jegulnomic\Controller;
 
-use Jegulnomic\Systems\Template\Template;
+use Jegulnomic\Systems\Controller\Attributes\LocalEnvironmentOnly;
 
-class PhpInfo
+#[LocalEnvironmentOnly]
+class DevTools
 {
-    public function index(): void
+    public function phpInfo(): void
     {
         phpinfo();
     }
@@ -14,10 +15,5 @@ class PhpInfo
     public function throw(): void
     {
         throw new \Exception('test exception');
-    }
-
-    public function shell()
-    {
-        return 'disabled';
     }
 }
