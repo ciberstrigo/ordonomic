@@ -3,7 +3,9 @@
 namespace Jegulnomic\Command;
 
 use Jegulnomic\Systems\Command;
+use Jegulnomic\Systems\Controller\Attributes\LocalEnvironmentOnly;
 
+#[LocalEnvironmentOnly]
 class DevTools extends AbstractCommand
 {
     public function sizeMB(): void

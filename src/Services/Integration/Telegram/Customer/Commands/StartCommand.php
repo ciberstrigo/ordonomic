@@ -1,6 +1,6 @@
 <?php
 
-namespace Jegulnomic\Services\Integration\Telegram\RemittanceOperator\Commands;
+namespace Jegulnomic\Services\Integration\Telegram\Customer\Commands;
 
 use DI\Attribute\Inject;
 use Jegulnomic\Services\Authenticator\RemittanceOperatorAuthenticator;
@@ -30,11 +30,11 @@ class StartCommand extends Command
     {
         $id = $bot->userId();
         $name = $bot->user()->first_name . ' ' . $bot->user()->last_name;
-        $operator = $this->authenticator->getUser($id);
+        $customer = $this->authenticator->getUser($id); // тут валится, так как даже таблицы нет
 
-        if (!$operator) {
+        if (!$customer) {
             $bot->sendMessage(
-                'Вас нет в списке операторов. Пройдите регистрацию. ',
+                'Здравствуйте, ' . $name . '! Вы новый пользователь? Пройдите регистрацию. ',
                 reply_markup: InlineKeyboardMarkup::make()
                     ->addRow(
                         InlineKeyboardButton::make(
@@ -52,14 +52,11 @@ class StartCommand extends Command
             return;
         }
 
-        if (!$operator->isVerified) {
-            $bot->sendMessage('Ваш аккаунт не верифицирован. Ожидайте верификацию администратора.');
-            return;
-        }
+        // Возможно здесь понадобится отдельная верификация, пока я хз
 
-        if (!$operator->isAllowToProceed()) {
+        if (!$customer->isAllowToProceed()) {
             $bot->sendMessage(
-                'Пожалуйста, войдите в систему чтобы продолжать получать уведомления. ',
+                'Для дальнейших действий войдите в систему. ',
                 reply_markup: InlineKeyboardMarkup::make()
                     ->addRow(
                         InlineKeyboardButton::make(
@@ -78,6 +75,6 @@ class StartCommand extends Command
         $this->authenticator->updateSession($id);
 
         $bot->sendMessage('Вы находитесь в системе. Ваша сессия обновлена и действительна до: '
-                . date("d F Y H:i:s", $operator->sessionUntil));
+                . date("d F Y H:i:s", $customer->sessionUntil));
     }
 }

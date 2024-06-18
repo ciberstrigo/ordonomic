@@ -1,6 +1,6 @@
 <?php
 
-namespace Jegulnomic\Services;
+namespace Jegulnomic\Services\BusinessProcess\Withdrawal;
 
 use DI\Attribute\Inject;
 use Jegulnomic\Entity\Income;
@@ -8,6 +8,7 @@ use Jegulnomic\Entity\Withdrawal;
 use Jegulnomic\Enum\Currencies;
 use Jegulnomic\Enum\Withdrawal\Status;
 use Jegulnomic\Services\Integration\GeorgianCentralBankIntegration;
+use Jegulnomic\Services\LariConverter;
 use Jegulnomic\Systems\Calculator\DecimalCalculator;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
@@ -30,7 +31,12 @@ readonly class WithdrawalCreator
 
     public function create(Income $income): Withdrawal
     {
-        $rateToLari = $this->georgianCentralBankIntegration->getCurrency($income->currency, $income->date)->getRate();
+        $rateToLari =
+            $this
+                ->georgianCentralBankIntegration
+                ->getCurrency($income->currency, $income->date)
+                ->getRate();
+
         $lari = $this->lariConverter->convertTo(
             Currencies::GEL,
             $income->getMoney(),

@@ -6,8 +6,8 @@ use DI\Attribute\Inject;
 use Jegulnomic\Command\AbstractCommand;
 use Jegulnomic\Repository\IncomeRepository;
 use Jegulnomic\Repository\RemittanceOperatorRepository;
+use Jegulnomic\Services\BusinessProcess\Withdrawal\WithdrawalCreator;
 use Jegulnomic\Services\Integration\Telegram\RemittanceOperator\BotProvider;
-use Jegulnomic\Services\WithdrawalCreator;
 use Jegulnomic\Systems\Command;
 use Jegulnomic\Systems\Database\DatabaseStorage;
 use Jegulnomic\Systems\StorageInterface;
@@ -48,12 +48,7 @@ class Withdrawal extends AbstractCommand
             return;
         }
 
-        //        try {
         $income->withdrawal = $this->withdrawalCreator->create($income);
-        //        } catch (\Throwable $e) {
-        //            throw new \RuntimeException('Error while creating withdrawal '.$e->getMessage());
-        //        }
-
         $income->withdrawal->sentTo = $operator;
 
         try {

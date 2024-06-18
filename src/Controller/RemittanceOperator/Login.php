@@ -33,6 +33,7 @@ readonly class Login
             'src/Templates/pages/RemittanceOperator/login.phtml',
             [
                 'telegram_user_id' => $_REQUEST['telegram_user_id'],
+                'telegram_username' => $_REQUEST['telegram_username'],
                 'close' => $isLoginSuccess,
             ]
         );

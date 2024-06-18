@@ -18,6 +18,10 @@ abstract readonly class AbstractRepository
     {
         if (is_array($objOrCollection)) {
             $this->storage->saveMany($objOrCollection);
+
+            return;
         }
+
+        $this->storage->save($objOrCollection);
     }
 }

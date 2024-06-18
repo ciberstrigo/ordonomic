@@ -45,4 +45,17 @@ class UpdateWebhook extends AbstractCommand
 
         Command::output('Webhook updated');
     }
+
+    public function forCustomer(): void
+    {
+        Command::output('Updating webhook to Customer');
+
+        try {
+            $this->webhookUpdater->forCustomer();
+        } catch (\Throwable) {
+            Command::output('Webhook was not set. Error occurred.');
+        }
+
+        Command::output('Webhook updated');
+    }
 }

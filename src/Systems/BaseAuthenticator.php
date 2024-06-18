@@ -10,7 +10,7 @@ use Ramsey\Uuid\Uuid;
 
 abstract class BaseAuthenticator
 {
-    private const SESSION_LIFE_TIME = 60 * 60 * 24; // 24 hour
+    protected const SESSION_LIFE_TIME = 60 * 60 * 24; // 24 hour
 
     public function __construct(
         #[Inject(DatabaseStorage::class)]

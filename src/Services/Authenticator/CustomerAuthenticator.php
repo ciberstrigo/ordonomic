@@ -10,6 +10,8 @@ use Override;
 
 class CustomerAuthenticator extends BaseAuthenticator
 {
+    protected const SESSION_LIFE_TIME = 60 * 60 * 0.5; // 30 minutes
+
     #[Override]
     protected function getUserClass(): string
     {

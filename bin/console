@@ -3,6 +3,7 @@
 
 use Jegulnomic\Command\AbstractCommand;
 use Jegulnomic\Systems\Command;
+use Jegulnomic\Systems\ContainerProvider;
 
 const ENTRYPOINT_DIR = __DIR__;
 
@@ -21,7 +22,7 @@ if (!method_exists($className, $methodName)) {
     die;
 }
 
-$container = \Jegulnomic\Systems\ContainerProvider::getContainer();
+$container = ContainerProvider::getContainer();
 /** @var AbstractCommand $instance */
 $instance = $container->get($className);
 
@@ -35,7 +36,7 @@ if (!method_exists($className, $methodName)) {
     die;
 }
 
-$container = \Jegulnomic\Systems\ContainerProvider::getContainer();
+$container = ContainerProvider::getContainer();
 /** @var AbstractCommand $instance */
 $instance = $container->get($className);
 $instance->setArguments(array_slice($argv, 3))->$methodName();

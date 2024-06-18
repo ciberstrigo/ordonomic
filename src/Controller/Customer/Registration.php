@@ -30,7 +30,8 @@ readonly class Registration
         return (new Template())->render(
             'src/Templates/pages/Customer/registration.phtml',
             [
-                'telegram_user_id' => $_GET['telegram_user_id'] ?? $_POST['telegram-user-id'],
+                'telegram_user_id' => $_REQUEST['telegram_user_id'],
+                'telegram_username' => $_REQUEST['telegram_username'],
                 'close' => $isRegisterUserSuccess,
             ]
         );

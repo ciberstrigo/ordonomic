@@ -31,6 +31,9 @@ operator__webhook_update:
 logger__webhook_update:
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) sh -c 'bin/console Telegram\\UpdateWebhook forLogger'
 
+customer__webhook_update:
+	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) sh -c 'bin/console Telegram\\UpdateWebhook forCustomer'
+
 get_incomes:
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) sh -c 'bin/console Cron\\Incomes proceed'
 

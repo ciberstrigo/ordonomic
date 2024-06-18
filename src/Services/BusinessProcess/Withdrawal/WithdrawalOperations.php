@@ -1,6 +1,6 @@
 <?php
 
-namespace Jegulnomic\Services;
+namespace Jegulnomic\Services\BusinessProcess\Withdrawal;
 
 use DI\Attribute\Inject;
 use Jegulnomic\Entity\Withdrawal;

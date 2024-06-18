@@ -8,10 +8,10 @@ use Jegulnomic\Systems\Controller\Attributes\Signature;
 use Psr\Container\ContainerInterface;
 
 #[Signature(secret: 'COMMAND_EMULATOR_SECRET')]
-class CommandCaller
+readonly class CommandCaller
 {
     public function __construct(
-        private readonly ContainerInterface $container,
+        private ContainerInterface $container,
     ) {
     }
 

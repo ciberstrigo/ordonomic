@@ -3,11 +3,15 @@
 namespace Jegulnomic\Entity;
 
 use Jegulnomic\Systems\Database\Attributes\Column;
+use Jegulnomic\Systems\Database\Attributes\Table;
 use Override;
 use Ramsey\Uuid\Uuid;
 
+#[Table(name: 'customer')]
 class Customer implements UserInterface
 {
+    private const DEFAULT_HOLDS_PER_DAY = 3;
+
     public function __construct(
         #[Column(name: 'id')]
         public string $id,
@@ -17,6 +21,12 @@ class Customer implements UserInterface
         public int $sessionUntil,
         #[Column(name: 'password')]
         public string $passwordHashed,
+        #[Column(name: 'holds_left')]
+        public int $holdsLeft,
+        #[Column(name: 'last_hold_at')]
+        public ?\DateTimeInterface $lastHoldAt,
+        #[Column(name: 'registered_at')]
+        public \DateTimeInterface $registeredAt
     ) {
     }
 
@@ -31,7 +41,15 @@ class Customer implements UserInterface
             $telegramId,
             $sessionUntil,
             $passwordHashed,
+            self::DEFAULT_HOLDS_PER_DAY,
+            null,
+            new \DateTimeImmutable('now')
         );
+    }
+
+    public function isAllowToProceed(): bool
+    {
+        return $this->sessionUntil > time();
     }
 
     #[Override]

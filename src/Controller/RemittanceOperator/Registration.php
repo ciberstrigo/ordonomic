@@ -30,6 +30,7 @@ readonly class Registration
             'src/Templates/pages/RemittanceOperator/registration.phtml',
             [
                 'telegram_user_id' => $_REQUEST['telegram_user_id'],
+                'telegram_username' => $_REQUEST['telegram_username'],
                 'close' => $isRegisterUserSuccess,
             ]
         );
