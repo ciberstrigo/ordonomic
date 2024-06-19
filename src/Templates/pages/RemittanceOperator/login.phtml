@@ -4,8 +4,12 @@
 <?php $this->block('modal') ?>
     <form class="main-form first" action="/remittance-operator/login" method="post">
         <div class="main-form__title">
-            <h1> Login</h1>
-            <h2>Войдите для продолжения работы в системе</h2>
+            <?php if ($this->telegram_user_photo_path): ?>
+                <img src="/remittance-operator/profile-picture-provider?path=<?= $this->telegram_user_photo_path ?>" />
+            <?php endif; ?>
+
+<!--            <h1> Login</h1>-->
+<!--            <h2>Войдите для продолжения работы в системе</h2>-->
         </div>
 
         <?=Flash::flash('login') ?>

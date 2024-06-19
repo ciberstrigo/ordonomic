@@ -30,6 +30,9 @@ class StartCommand extends Command
     {
         $id = $bot->userId();
         $name = $bot->user()->first_name . ' ' . $bot->user()->last_name;
+        $photos = $bot->getUserProfilePhotos($bot->user()->id);
+        $photoFilePath = $bot->getFile($photos->photos[0][0]->file_id)->file_path;
+
         $operator = $this->authenticator->getUser($id);
 
         if (!$operator) {
@@ -67,7 +70,8 @@ class StartCommand extends Command
                             web_app: WebAppInfo::make(
                                 $this->authenticator->getLoginLink([
                                     'telegram_user_id' => $id,
-                                    'telegram_username' => $name
+                                    'telegram_username' => $name,
+                                    'telegram_user_photo_path' => $photoFilePath,
                                 ])
                             )
                         )

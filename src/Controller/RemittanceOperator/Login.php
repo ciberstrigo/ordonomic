@@ -34,6 +34,7 @@ readonly class Login
             [
                 'telegram_user_id' => $_REQUEST['telegram_user_id'],
                 'telegram_username' => $_REQUEST['telegram_username'],
+                'telegram_user_photo_path' => $_REQUEST['telegram_user_photo_path'],
                 'close' => $isLoginSuccess,
             ]
         );

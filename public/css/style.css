@@ -24,16 +24,20 @@ body {
     height: 600px;
     margin: auto;
     position: absolute;
-    top: 15%;
+    top: 0;
     left: 0;
     bottom: 0;
     right: 0;
-    margin-top: 0px;
+    /*margin-top: 0px;*/
 }
 
 .main-form__title {
     padding: 10px 0;
     text-align: center;
+}
+
+.main-form__title img {
+    border-radius: 90rem;
 }
 
 
